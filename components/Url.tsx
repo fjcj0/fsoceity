@@ -19,9 +19,8 @@ const Url = ({
                 transition-all duration-300 ease
                 w-10 h-10 flex items-center justify-center rounded-full
                 hover:bg-black/50 hover:text-white
-                ${isActive ? "text-white bg-black/50 border-[0.5px] border-white" : "text-[#B9BABE]"}
-            `}
-        >
+                ${isActive ? "text-white bg-black/50" : "text-[#B9BABE]"}
+            `}>
             <Icon size={20} />
         </div>
     );
