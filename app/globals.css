@@ -10,3 +10,10 @@ body {
   font-family: var(--font-poppins);
   background: var(--background);
 }
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
