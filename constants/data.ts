@@ -1,4 +1,4 @@
-import { Home, MessageSquare, User, LogOut } from "lucide-react";
+import { Home, MessageSquare, User, LogOut, Users, UserPlus } from "lucide-react";
 export const links = [
     {
         icon: Home,
@@ -19,6 +19,19 @@ export const links = [
         icon: LogOut,
         isButton: true,
     }
+];
+export const links_chat = [
+    {
+        icon: UserPlus,
+        direction: '/contacts',
+        isButton: false,
+    },
+    {
+        icon: Users,
+        direction: '/groups',
+        isButton: false,
+    },
+
 ];
 export const posts = [
     {
@@ -47,5 +60,51 @@ export const posts = [
         likesNumber: 64,
         isLiked: false,
         isBookMarked: false,
+    }
+];
+export const contacts_chat = [
+    {
+        id: 1,
+        name: "Ahmed Ali",
+        status: "online",
+        avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+    },
+    {
+        id: 2,
+        name: "Sara Mohamed",
+        status: "offline",
+        avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    {
+        id: 3,
+        name: "John Smith",
+        status: "offline",
+        avatar: "https://randomuser.me/api/portraits/men/65.jpg"
+    },
+    {
+        id: 4,
+        name: "Emily Johnson",
+        status: "online",
+        avatar: "https://randomuser.me/api/portraits/women/68.jpg"
+    }
+];
+export const groups_chat = [
+    {
+        id: 1,
+        groupName: "Developers Team",
+        logo: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200&q=80",
+        status: "online"
+    },
+    {
+        id: 2,
+        groupName: "Design Squad",
+        logo: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&q=80",
+        status: "offline"
+    },
+    {
+        id: 3,
+        groupName: "Marketing Group",
+        logo: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=200&q=80",
+        status: "online"
     }
 ];
