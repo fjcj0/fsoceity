@@ -1,4 +1,4 @@
-import { Home, MessageSquare, User, LogOut, Users, UserPlus } from "lucide-react";
+import { Home, MessageSquare, User, LogOut, Users, UserPlus, Bookmark, Heart, Archive } from "lucide-react";
 export const links = [
     {
         icon: Home,
@@ -66,25 +66,25 @@ export const contacts_chat = [
     {
         id: 1,
         name: "Ahmed Ali",
-        status: "online",
+        status: "online" as 'offline' | 'online',
         avatar: "https://randomuser.me/api/portraits/men/32.jpg"
     },
     {
         id: 2,
         name: "Sara Mohamed",
-        status: "offline",
+        status: "offline" as 'offline' | 'online',
         avatar: "https://randomuser.me/api/portraits/women/44.jpg"
     },
     {
         id: 3,
         name: "John Smith",
-        status: "offline",
+        status: "offline" as 'offline' | 'online',
         avatar: "https://randomuser.me/api/portraits/men/65.jpg"
     },
     {
         id: 4,
         name: "Emily Johnson",
-        status: "online",
+        status: "online" as 'offline' | 'online',
         avatar: "https://randomuser.me/api/portraits/women/68.jpg"
     }
 ];
@@ -93,18 +93,26 @@ export const groups_chat = [
         id: 1,
         groupName: "Developers Team",
         logo: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200&q=80",
-        status: "online"
+        status: "online" as 'offline' | 'online'
     },
     {
         id: 2,
         groupName: "Design Squad",
         logo: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&q=80",
-        status: "offline"
+        status: "offline" as 'offline' | 'online'
+    }
+];
+export const types = [
+    {
+        icon: Archive,
+        type: 'posts' as 'posts' | 'saves' | 'likes',
     },
     {
-        id: 3,
-        groupName: "Marketing Group",
-        logo: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=200&q=80",
-        status: "online"
+        icon: Bookmark,
+        type: 'saves' as 'posts' | 'saves' | 'likes',
+    },
+    {
+        icon: Heart,
+        type: 'likes' as 'posts' | 'saves' | 'likes',
     }
 ];
