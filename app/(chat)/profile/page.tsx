@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import { types } from "@/constants/data";
+import NothingToAppear from "@/components/NothingToAppear";
 const ProfilePage: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
@@ -15,6 +16,12 @@ const ProfilePage: React.FC = () => {
         }
     };
     const [type, setType] = useState<'posts' | 'saves' | 'likes'>('posts');
+    const CorrectMessage: React.FC = () => {
+        if (type === 'posts') return <NothingToAppear header="No Post Yet" par="You didn't post anything yet" />
+        if (type === 'likes') return <NothingToAppear header="No Likes Yet" par="You didn't like post yet" />
+        if (type === 'saves') return <NothingToAppear header="No Saves Yet" par="You didn't save post yet" />
+        return null;
+    };
     return (
         <div className="w-full flex flex-col items-center justify-start">
             <div className="w-full flex max-md:flex-col items-start justify-start">
@@ -69,7 +76,7 @@ const ProfilePage: React.FC = () => {
                 ))}
             </div>
             <div className="w-full mt-13">
-
+                <CorrectMessage />
             </div>
         </div>
     );
