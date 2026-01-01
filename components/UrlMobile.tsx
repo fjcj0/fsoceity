@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import useHeaderStore from "@/store/HeaderStore";
 
 const UrlMobile = ({
     title,
@@ -13,10 +14,12 @@ const UrlMobile = ({
     icon: LucideIcon;
     direction?: string;
 }) => {
+    const { closeHeaderSlide } = useHeaderStore();
     const pathname = usePathname();
     const isActive = direction ? pathname === direction : false;
     return (
         <Link
+            onClick={closeHeaderSlide}
             href={direction ?? "#"}
             className={`w-full flex items-center justify-start gap-x-2 p-3 ${isActive ? "bg-black/65 rounded-lg" : ""
                 }`}>
