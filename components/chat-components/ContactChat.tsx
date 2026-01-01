@@ -6,8 +6,8 @@ interface ContactChatProps {
 }
 const ContactChat = ({ name, avatar, status }: ContactChatProps) => {
     return (
-        <div className="w-full flex items-center hover:bg-[#242424]/60 duration-300 ease-in cursor-pointer">
-            <div className="relative flex items-center gap-x-2 pl-3 py-2">
+        <div className="w-full flex items-center border-r-[0.5px] border-r-transparent hover:bg-[#242424]/60 hover:border-r-white duration-300 ease-in cursor-pointer">
+            <div className="relative flex items-center max-lg:items-start max-lg:flex-col gap-x-2 pl-3 py-2">
                 <div className="relative flex items-center justify-center">
                     {avatar ? (
                         <Image
