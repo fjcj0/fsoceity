@@ -2,8 +2,11 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { types } from "@/constants/data";
+import { liked_posts, saved_posts, types, user_posts } from "@/constants/data";
 import NothingToAppear from "@/components/NothingToAppear";
+import ProfileLiked from "@/components/profile-components/ProfileLiked";
+import { ProfileSaved } from "@/components/profile-components/ProfileSaved";
+import { ProfilePost } from "@/components/profile-components/ProfilePost";
 const page = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
@@ -17,9 +20,65 @@ const page = () => {
     };
     const [type, setType] = useState<'posts' | 'saves' | 'likes'>('posts');
     const CorrectMessage: React.FC = () => {
-        if (type === 'posts') return <NothingToAppear header="No Post Yet" par="You didn't post anything yet" />
-        if (type === 'likes') return <NothingToAppear header="No Likes Yet" par="You didn't like post yet" />
-        if (type === 'saves') return <NothingToAppear header="No Saves Yet" par="You didn't save post yet" />
+        if (type === "likes") {
+            return (
+                <div>
+                    {liked_posts.length === 0 ? (
+                        <NothingToAppear header="No Likes Yet" par="You haven't liked any post yet" />
+                    ) : (
+                        <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
+                            {liked_posts.map((liked_post, index) => (
+                                <ProfileLiked
+                                    key={index}
+                                    image={liked_post.image}
+                                    par={liked_post.paragraph}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        if (type === "posts") {
+            return (
+                <div>
+                    {user_posts.length === 0 ? (
+                        <NothingToAppear header="No Posts Yet" par="You haven't posted anything yet" />
+                    ) : (
+                        <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
+                            {user_posts.map((user_post, index) => (
+                                <ProfilePost
+                                    key={index}
+                                    image={user_post.image}
+                                    par={user_post.paragraph}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        if (type === "saves") {
+            return (
+                <div>
+                    {saved_posts.length === 0 ? (
+                        <NothingToAppear header="No Saves Yet" par="You haven't saved any post yet" />
+                    ) : (
+                        <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
+                            {saved_posts.map((saved_post, index) => (
+                                <ProfileSaved
+                                    key={index}
+                                    image={saved_post.image}
+                                    par={saved_post.paragraph}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
         return null;
     };
     return (

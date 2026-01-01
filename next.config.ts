@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
     domains: [
       'images.pexels.com',
       'images.unsplash.com',
-      'randomuser.me'
+      'randomuser.me',
+      'picsum.photos'
     ],
   },
 };

@@ -184,3 +184,55 @@ export const dummyGroups = [
         createdAt: "2025-12-01",
     },
 ];
+
+export const liked_posts = [
+    {
+        profilePicture: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+        paragraph: "Enjoying the latest tech innovations at work! Excited about new AI tools 🤖.",
+    },
+    {
+        image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800",
+        paragraph: "Just tried this awesome gadget — tech life is the best life! 💻✨",
+    },
+    {
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800",
+        paragraph: "Tech meetup vibes 🌐🚀 #Innovation",
+    }
+];
+export const user_posts = [
+    {
+        image: "https://picsum.photos/id/1040/400/400",
+        paragraph: "My latest photography experiment"
+    },
+    {
+        image: "https://picsum.photos/id/1031/400/400",
+        paragraph: "Sunlit beach vibes from my summer trip"
+    },
+    {
+        image: "https://picsum.photos/id/1059/400/400",
+        paragraph: "Captured this quiet city moment"
+    },
+    {
+        image: "https://picsum.photos/id/1035/400/400",
+        paragraph: "Morning hike in the woods"
+    }
+];
+
+export const saved_posts = [
+    {
+        image: "https://picsum.photos/id/1084/400/400",
+        paragraph: "Architecture inspiration for my next project"
+    },
+    {
+        image: "https://picsum.photos/id/109/400/400",
+        paragraph: "Delicious street food from my travels"
+    },
+    {
+        image: "https://picsum.photos/id/112/400/400",
+        paragraph: "Experimental graphic design ideas"
+    },
+    {
+        image: "https://picsum.photos/id/116/400/400",
+        paragraph: "Peaceful lakeside view to save for later"
+    }
+];

@@ -4,7 +4,9 @@ import { posts } from "@/constants/data";
 const page = () => {
     return (
         <div className="w-full flex flex-col items-center max-w-6xl mx-auto">
-            <Media />
+            <div className="w-full max-w-2xl">
+                <Media />
+            </div>
             <div className="mt-10 w-full grid grid-cols-1 gap-6">
                 {posts.map((post, index) => (
                     <Post
