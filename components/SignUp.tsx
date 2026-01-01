@@ -2,7 +2,9 @@
 import { useState } from "react";
 import Input from "./Input";
 import Button from "./Button";
+import { useRouter } from "next/navigation";
 const SignUp = () => {
+    const router = useRouter();
     const [name, setName] = useState<string>('');
     const [errorName, setErrorName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -12,7 +14,7 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('');
     return (
-        <form onSubmit={() => console.log('Here to submit')} className="w-full flex flex-col items-start justify-start gap-5">
+        <div className="w-full flex flex-col items-start justify-start gap-5">
             <h1 className="text-start text-3xl font-semibold tracking-tighter bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent">
                 <span>Sign Up</span>
                 <span> To Your Account</span>
@@ -53,8 +55,8 @@ const SignUp = () => {
                 type="password"
                 isPassword={true}
             />
-            <Button isLoading={false} title="Sign Up" onClick={async () => console.log('Sign Up')} />
-        </form>
+            <Button isLoading={false} title="Sign Up" onClick={async () => { router.replace('/home') }} />
+        </div>
     );
 }
 export default SignUp;

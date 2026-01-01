@@ -1,4 +1,5 @@
 import { Home, MessageSquare, User, LogOut, Users, UserPlus, Bookmark, Heart, Archive } from "lucide-react";
+import { title } from "process";
 export const links = [
     {
         icon: Home,
@@ -32,6 +33,33 @@ export const links_chat = [
         isButton: false,
     },
 
+];
+export const mobile_links = [
+    {
+        title: 'Home',
+        icon: Home,
+        direction: '/home',
+    },
+    {
+        title: 'Chat',
+        icon: MessageSquare,
+        direction: '/chat',
+    },
+    {
+        title: 'Profile',
+        icon: User,
+        direction: '/profile',
+    },
+    {
+        title: 'Contacts',
+        icon: UserPlus,
+        direction: '/contacts',
+    },
+    {
+        title: 'Groups',
+        icon: Users,
+        direction: '/groups',
+    },
 ];
 export const posts = [
     {
