@@ -4,7 +4,7 @@ import Image from "next/image";
 import Button from "@/components/Button";
 import { types } from "@/constants/data";
 import NothingToAppear from "@/components/NothingToAppear";
-const ProfilePage: React.FC = () => {
+const page = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -39,7 +39,7 @@ const ProfilePage: React.FC = () => {
                         />
                     </button>
                 </div>
-                <div className="ml-5 max-md:w-full flex flex-col items-start justify-center gap-y-1 my-auto relative">
+                <div className="ml-5 max-md:w-full flex flex-col items-start justify-start gap-y-1 my-auto relative">
                     <h1 className="text-white font-black text-lg md:text-3xl">OMAR CODING</h1>
                     <p className="text-white/60 font-light text-sm">Full-Stack Developer</p>
                     <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
@@ -47,7 +47,7 @@ const ProfilePage: React.FC = () => {
                         <p>2 <span>Groups</span></p>
                         <p>10 <span>Contacts</span></p>
                     </div>
-                    <div className="mt-3 flex items-center justify-center gap-3 w-full pr-3">
+                    <div className="mt-3 flex items-start justify-start gap-3 w-full pr-3">
                         <Button title="Edit Profile" onClick={async () => console.log('edit profile')} isLoading={false} icon="/edit.png" />
                     </div>
                 </div>
@@ -80,4 +80,4 @@ const ProfilePage: React.FC = () => {
         </div>
     );
 };
-export default ProfilePage;
+export default page;

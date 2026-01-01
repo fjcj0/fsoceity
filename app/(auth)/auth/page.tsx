@@ -6,7 +6,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SignUp from "@/components/SignUp";
 import SignIn from "@/components/SignIn";
-const AuthPage = () => {
+const page = () => {
     const [authState, setAuthState] = useState<"sign-in" | "sign-up">("sign-up");
     const formVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -111,4 +111,4 @@ const AuthPage = () => {
         </div>
     );
 };
-export default AuthPage;
+export default page;

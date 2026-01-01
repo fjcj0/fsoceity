@@ -1,7 +1,7 @@
 import Media from "@/components/home-components/Media";
 import Post from "@/components/home-components/Post";
 import { posts } from "@/constants/data";
-const HomePage = () => {
+const page = () => {
     return (
         <div className="w-full flex flex-col items-center max-w-6xl mx-auto">
             <Media />
@@ -22,4 +22,4 @@ const HomePage = () => {
         </div>
     );
 };
-export default HomePage;
+export default page;

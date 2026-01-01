@@ -158,3 +158,29 @@ export const dummyContacts = [
         date: "2023-09-09",
     },
 ];
+export const dummyGroups = [
+    {
+        name: "Nature Lovers",
+        groupPicture: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=80&q=80",
+        isJoined: true,
+        isPending: false,
+        isCreated: false,
+        createdAt: "2025-11-12",
+    },
+    {
+        name: "Movie Fans",
+        groupPicture: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=80&q=80",
+        isJoined: false,
+        isPending: false,
+        isCreated: true,
+        createdAt: "2025-10-01",
+    },
+    {
+        name: "Foodies",
+        groupPicture: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=80&q=80",
+        isJoined: false,
+        isPending: false,
+        isCreated: false,
+        createdAt: "2025-12-01",
+    },
+];

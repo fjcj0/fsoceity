@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-const ResetPage = () => {
+const page = () => {
   const [newPassword, setNewPassword] = useState<string>('');
   const [errorNewPassword, setErrorNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -40,4 +40,4 @@ const ResetPage = () => {
     </div>
   );
 };
-export default ResetPage;
+export default page;

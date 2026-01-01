@@ -2,7 +2,7 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useState } from "react";
-const ForgetPasswordPage = () => {
+const page = () => {
     const [email, setEmail] = useState<string>('');
     const [errorEmail, setErrorEmail] = useState<string>('');
     return (
@@ -26,4 +26,4 @@ const ForgetPasswordPage = () => {
         </div>
     );
 }
-export default ForgetPasswordPage;
+export default page;

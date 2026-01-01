@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-const VerificationPage = () => {
+const page = () => {
     const [code, setCode] = useState<string>('');
     const [errorCode, setErrorCode] = useState<string>('');
     const params = useParams();
@@ -29,4 +29,4 @@ const VerificationPage = () => {
         </div>
     );
 }
-export default VerificationPage;
+export default page;

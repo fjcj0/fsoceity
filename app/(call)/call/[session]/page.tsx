@@ -1,8 +1,8 @@
-const CallPage = () => {
+const page = () => {
     return (
         <div>
 
         </div>
     );
 }
-export default CallPage;
+export default page;

@@ -5,7 +5,7 @@ import animation from '../../../animations/community.json';
 import ContactChat from "@/components/chat-components/ContactChat";
 import GroupChat from "@/components/chat-components/GroupChat";
 import { contacts_chat, groups_chat } from "@/constants/data";
-const ChatPage = () => {
+const page = () => {
     const [type, setType] = useState<'contacts' | 'groups'>('contacts');
     return (
         <div className="w-full max-w-5xl mx-auto h-full flex flex-col items-center justify-center">
@@ -58,4 +58,4 @@ const ChatPage = () => {
         </div>
     );
 };
-export default ChatPage;
+export default page;
