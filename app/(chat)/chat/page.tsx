@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
-import Lottie from "lottie-react";
-import animation from "../../../animations/community.json";
 import ContactChat from "@/components/chat-components/ContactChat";
 import GroupChat from "@/components/chat-components/GroupChat";
 import { contacts_chat, groups_chat } from "@/constants/data";
 import Session from "@/components/chat-components/Session";
+import Lottie from "lottie-react";
+import animation from '../../../animations/Digitalmedia.json';
 const Page = () => {
     const [type, setType] = useState<"contacts" | "groups">("contacts");
-    const [isSelectedSession, setIsSelectedSession] = useState(true);
+    const [isSelectedSession, setIsSelectedSession] = useState(false);
     const [isUser] = useState(false);
     const [isCallStarted] = useState(false);
     return (
@@ -27,7 +27,7 @@ const Page = () => {
                     <span className="text-xs text-white/30">online</span>
                 </label>
             </div>
-            <div className="w-full h-[50rem] rounded-3xl overflow-hidden">
+            <div className="w-full h-[38rem] rounded-3xl overflow-hidden">
                 <div className="w-full h-full grid grid-cols-12 min-h-0">
                     <div className="col-span-2 bg-black overflow-y-auto">
                         <div className="mt-6 flex flex-col gap-3">
@@ -52,7 +52,15 @@ const Page = () => {
                     </div>
                     <div className="col-span-10 h-full min-h-0 bg-black/40 backdrop-blur-md">
                         {!isSelectedSession ? (
-                            <Lottie animationData={animation} loop />
+                            <div className="w-full h-full flex flex-col items-center justify-center">
+                                <Lottie animationData={animation} loop />
+                                <h1
+                                    className="text-center mt-5 text-4xl font-semibold tracking-tighter bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent"
+
+                                >
+                                    <span>Start Your First <br /></span>
+                                    <span> On Fsoceity<br /></span>
+                                </h1>                            </div>
                         ) : (
                             <Session isUser={isUser} isCallStarted={isCallStarted}>
                                 <div className="flex flex-col gap-3">
