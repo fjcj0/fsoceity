@@ -46,7 +46,7 @@ export default function Button({
                     className={`${isLoading
                         ? "opacity-50 cursor-auto"
                         : "cursor-pointer hover:bg-black/75"
-                        } w-full font-bold transition-all duration-400 ease px-8 text-sm py-3 text-white rounded-full bg-black backdrop-blur flex items-center justify-center gap-2`}
+                        } w-full font-medium transition-all duration-400 ease px-8 text-xs py-3 text-white rounded-full bg-black backdrop-blur flex items-center justify-center gap-2`}
                 >
                     {isLoading ? (
                         <Loader />
