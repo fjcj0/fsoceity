@@ -9,7 +9,7 @@ const Post = ({
     image,
     likesNumber,
     isLiked: initialLiked,
-    isBookMarked: initialBookMarked
+    isBookMarked: initialBookMarked = false,
 }: {
     name: string;
     profilePicture: string;
@@ -20,59 +20,63 @@ const Post = ({
     isBookMarked?: boolean;
 }) => {
     const [liked, setLiked] = useState(initialLiked);
-    const [bookMarked, setBookMarked] = useState(initialBookMarked || false);
+    const [bookMarked, setBookMarked] = useState(initialBookMarked);
     const [likes, setLikes] = useState(likesNumber);
     const toggleLike = () => {
-        setLiked(!liked);
-        setLikes(prev => liked ? prev - 1 : prev + 1);
+        setLiked((prev) => !prev);
+        setLikes((prev) => (liked ? prev - 1 : prev + 1));
     };
     const toggleBookmark = () => {
-        setBookMarked(!bookMarked);
+        setBookMarked((prev) => !prev);
     };
     return (
-        <div className="w-full flex flex-col gap-y-3 rounded-lg text-white">
-            <div className="bg-black p-5 rounded-xl flex flex-col gap-3">
-                <div className="w-full flex items-center gap-x-3">
-                    <div className="w-10 h-10 relative rounded-full overflow-hidden">
+        <div className="w-full max-w-2xl mx-auto flex flex-col gap-y-3 text-white">
+            <div className="bg-black p-5 rounded-xl flex flex-col gap-4">
+                <div className="flex items-center gap-x-3">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden">
                         <Image
                             src={profilePicture}
                             alt={name}
                             fill
-                            style={{ objectFit: "cover" }}
+                            className="object-cover"
                         />
                     </div>
                     <span className="font-semibold">{name}</span>
                 </div>
-                <div className="w-full flex flex-col gap-y-3 rounded-lg">
-                    {paragraph && <p className="text-gray-200 text-sm font-light">{paragraph}</p>}
-                    {image && (
-                        <div className="w-full relative h-80 rounded-lg overflow-hidden">
-                            <Image
-                                src={image}
-                                alt="Post Image"
-                                fill
-                                style={{ objectFit: "cover" }}
-                            />
-                        </div>
-                    )}
-                </div>
-                <div className="w-full flex items-center justify-between text-gray-300">
+                {paragraph && (
+                    <p className="text-gray-200 text-sm font-light">
+                        {paragraph}
+                    </p>
+                )}
+                {image && (
+                    <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden">
+                        <Image
+                            src={image}
+                            alt="Post image"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+                )}
+                <div className="flex items-center justify-between text-gray-300">
                     <button
                         type="button"
-                        className="flex items-center justify-center gap-x-1"
                         onClick={toggleLike}
+                        className="flex items-center gap-x-1"
                     >
                         <Heart
+                            size={22}
                             color={liked ? "red" : "white"}
                             fill={liked ? "red" : "none"}
                             strokeWidth={liked ? 0 : 2}
                         />
-                        <p>{likes}</p>
+                        <span>{likes}</span>
                     </button>
                     <button type="button" onClick={toggleBookmark}>
                         <Bookmark
+                            size={22}
                             color="white"
-                            style={{ fill: bookMarked ? "white" : "none" }}
+                            fill={bookMarked ? "white" : "none"}
                         />
                     </button>
                 </div>

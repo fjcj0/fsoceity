@@ -39,7 +39,7 @@ const ProfilePage: React.FC = () => {
                         />
                     </button>
                 </div>
-                <div className="ml-5 w-full flex flex-col items-start justify-center gap-y-1 my-auto relative">
+                <div className="ml-5 max-md:w-full flex flex-col items-start justify-center gap-y-1 my-auto relative">
                     <h1 className="text-white font-black text-lg md:text-3xl">OMAR CODING</h1>
                     <p className="text-white/60 font-light text-sm">Full-Stack Developer</p>
                     <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
@@ -49,7 +49,6 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div className="mt-3 flex items-center justify-center gap-3 w-full pr-3">
                         <Button title="Edit Profile" onClick={async () => console.log('edit profile')} isLoading={false} icon="/edit.png" />
-                        <Button title="Copy Link" onClick={async () => console.log('Copy Link')} isLoading={false} icon="/copy.png" />
                     </div>
                 </div>
             </div>

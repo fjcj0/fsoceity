@@ -116,3 +116,45 @@ export const types = [
         type: 'likes' as 'posts' | 'saves' | 'likes',
     }
 ];
+export const dummyContacts = [
+    {
+        name: "Alex Johnson",
+        profilePicture: "https://randomuser.me/api/portraits/men/32.jpg",
+        isSent: false,
+        isPending: false,
+        isAccepted: false,
+        date: "2024-03-12",
+    },
+    {
+        name: "Sophia Martinez",
+        profilePicture: "https://randomuser.me/api/portraits/women/44.jpg",
+        isSent: true,
+        isPending: true,
+        isAccepted: false,
+        date: "2024-01-25",
+    },
+    {
+        name: "Daniel Kim",
+        profilePicture: "https://randomuser.me/api/portraits/men/76.jpg",
+        isSent: false,
+        isPending: false,
+        isAccepted: true,
+        date: "2023-11-02",
+    },
+    {
+        name: "Emily Brown",
+        profilePicture: "https://randomuser.me/api/portraits/women/68.jpg",
+        isSent: false,
+        isPending: true,
+        isAccepted: false,
+        date: "2024-02-18",
+    },
+    {
+        name: "Michael Wilson",
+        profilePicture: "https://randomuser.me/api/portraits/men/12.jpg",
+        isSent: false,
+        isPending: false,
+        isAccepted: true,
+        date: "2023-09-09",
+    },
+];
