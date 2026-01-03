@@ -12,6 +12,7 @@
     "@neondatabase/serverless": "^1.0.2",
     "@prisma/client": "^6.19.1",
     "@react-email/render": "^2.0.1",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "crypto": "^1.0.1",
