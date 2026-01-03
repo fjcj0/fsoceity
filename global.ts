@@ -7,7 +7,7 @@ export type LinkType = {
 export type UserType = {
     id: string,
     name: string,
-    email: string,
+    email: string & { __brand: "LowercaseOnlyString" },
     profilePicture: string | null,
     bio: string | null,
 } | null | undefined;
