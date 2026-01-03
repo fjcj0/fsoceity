@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from 'crypto';
 import { sendEmail } from "@/utils/sendEmail";
 import SendLink from "@/template/email/reset-password/SendLink";
-export default async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
         const { email } = await request.json() as forgetPassType;
         if (!email) return NextResponse.json({

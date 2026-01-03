@@ -2,7 +2,7 @@ import { prisma } from "@/app/lib/prisma";
 import { resetType } from "@/types/auth_types";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-export default async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
         const { newPassword, confirm_password, resetToken } = await request.json() as resetType;
         if (!newPassword || !confirm_password || !resetToken) {
