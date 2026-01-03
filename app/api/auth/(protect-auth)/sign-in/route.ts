@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
             from: process.env.EMAIL_DOMAIN!,
             to: email,
             subject: 'Send Verification code from Fsoceity',
-            react: SendCode({ code }),
+            react: SendCode({ code: code }),
         });
         return NextResponse.json({
             message: `The code has been sent to ${email} check your email`,
