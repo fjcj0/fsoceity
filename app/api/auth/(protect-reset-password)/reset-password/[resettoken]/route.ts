@@ -2,21 +2,19 @@ import { prisma } from "@/app/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(
     request: NextRequest,
-    { params }: { params: { resettoken: string } }
+    context: { params: { resettoken: string } }
 ) {
     try {
-        const { resettoken } = params;
-        const isUserFound = await prisma.user.findFirst({
+        const { resettoken } = context.params;
+        const userExists = await prisma.user.findFirst({
             where: {
                 resetToken: resettoken,
                 resetTokenExpiresAt: {
                     gt: new Date(),
                 },
             },
-        })
-            ? true
-            : false;
-        if (!isUserFound) {
+        });
+        if (!userExists) {
             return NextResponse.json(
                 { success: false, message: "The link expired" },
                 { status: 400 }
@@ -30,7 +28,7 @@ export async function GET(
         return NextResponse.json(
             {
                 success: false,
-                error: `Fatal Error: ${error instanceof Error ? error.message : error}`,
+                error: error instanceof Error ? error.message : String(error),
             },
             { status: 500 }
         );

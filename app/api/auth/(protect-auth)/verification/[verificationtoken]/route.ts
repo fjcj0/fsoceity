@@ -3,23 +3,21 @@ import { blockAuthenticatedUser } from "@/middleware/user.middleware";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(
     request: NextRequest,
-    { params }: { params: { verificationtoken: string } }
+    context: { params: { verificationtoken: string } }
 ) {
     try {
+        const { verificationtoken } = context.params;
         const block = await blockAuthenticatedUser(request);
         if (block) return block;
-        const { verificationtoken } = params;
-        const isUserFound = await prisma.user.findFirst({
+        const userExists = await prisma.user.findFirst({
             where: {
                 verificationToken: verificationtoken,
                 verificationTokenExpiresAt: {
                     gt: new Date(),
                 },
             },
-        })
-            ? true
-            : false;
-        if (!isUserFound) {
+        });
+        if (!userExists) {
             return NextResponse.json(
                 { success: false, message: "The link expired" },
                 { status: 400 }
@@ -33,7 +31,7 @@ export async function GET(
         return NextResponse.json(
             {
                 success: false,
-                error: `Fatal Error: ${error instanceof Error ? error.message : error}`,
+                error: error instanceof Error ? error.message : String(error),
             },
             { status: 500 }
         );
