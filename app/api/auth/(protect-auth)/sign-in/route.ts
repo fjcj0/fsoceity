@@ -1,3 +1,4 @@
+import { sendCodeHtml } from '@/template/email/verification-code/SendCode';
 import { prisma } from "@/app/lib/prisma";
 import { signInType } from "@/types/auth_types";
 import bcrypt from 'bcryptjs';
@@ -5,7 +6,6 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from 'crypto';
 import { blockAuthenticatedUser } from "@/middleware/user.middleware";
 import { sendEmail } from "@/utils/sendEmail";
-import SendCode from "@/template/email/verification-code/SendCode";
 import { NumericString } from "@/global";
 export async function POST(request: NextRequest) {
     try {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
             from: process.env.EMAIL_DOMAIN!,
             to: email,
             subject: 'Send Verification code from Fsoceity',
-            react: SendCode({ code: code }),
+            html: sendCodeHtml(code)
         });
         return NextResponse.json({
             message: `The code has been sent to ${email} check your email`,

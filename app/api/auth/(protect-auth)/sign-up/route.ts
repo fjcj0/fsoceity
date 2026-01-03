@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { blockAuthenticatedUser } from "@/middleware/user.middleware";
 import { NumericString } from "@/global";
 import { sendEmail } from "@/utils/sendEmail";
-import SendCode from "@/template/email/verification-code/SendCode";
+import { sendCodeHtml } from "@/template/email/verification-code/SendCode";
 export async function POST(request: NextRequest) {
     try {
         const block = await blockAuthenticatedUser(request);
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
             from: process.env.EMAIL_DOMAIN!,
             to: email,
             subject: 'Send Verification code from Fsoceity',
-            react: SendCode({ code }),
+            html: sendCodeHtml(code)
         });
         return NextResponse.json(
             {

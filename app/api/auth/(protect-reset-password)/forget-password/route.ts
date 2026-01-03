@@ -3,7 +3,7 @@ import { forgetPassType } from "@/types/auth_types";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from 'crypto';
 import { sendEmail } from "@/utils/sendEmail";
-import SendLink from "@/template/email/reset-password/SendLink";
+import { sendLink } from "@/template/email/reset-password/SendLink";
 export async function POST(request: NextRequest) {
     try {
         const { email } = await request.json() as forgetPassType;
@@ -35,8 +35,8 @@ export async function POST(request: NextRequest) {
             from: process.env.EMAIL_DOMAIN!,
             to: email,
             subject: 'Reset Password Link From Fsoceity',
-            react: SendLink({ link: `${process.env.SERVER_URL!}/auth/reset-password/${resetToken}` })
-        })
+            html: sendLink(`${process.env.SERVER_URL}/reset-password/${resetToken}`)
+        });
         return NextResponse.json({
             success: true,
             message: `The link sent to your email, check your email`,
