@@ -22,13 +22,16 @@ export async function POST(request: NextRequest) {
         }, { status: 404 });
         const resetToken: string = crypto.randomBytes(32).toString("hex");
         const resetTokenExpiresAt: Date = new Date(Date.now() + 60 * 60 * 1000);
+        const now: Date = new Date();
+        const nextAvailableSend: Date = new Date(now.getTime() + 30_000);
         await prisma.user.update({
             where: {
                 email
             },
             data: {
                 resetToken,
-                resetTokenExpiresAt
+                resetTokenExpiresAt,
+                lastResetTokenSentAt: nextAvailableSend
             }
         });
         await sendEmail({

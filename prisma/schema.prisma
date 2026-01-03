@@ -17,8 +17,10 @@ model User {
   profilePicture             String?
   resetToken                 String?
   resetTokenExpiresAt        DateTime?
+  lastResetTokenSentAt       DateTime?
   verificationToken          String?
   verificationTokenExpiresAt DateTime?
+  lastVerificationSentAt     DateTime?
   code                       String?
   posts                      Post[]
   likes                      Like[]

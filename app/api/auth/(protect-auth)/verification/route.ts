@@ -39,7 +39,8 @@ export async function POST(request: NextRequest) {
                 verificationToken: null,
                 verificationTokenExpiresAt: null,
                 resetToken: null,
-                resetTokenExpiresAt: null
+                resetTokenExpiresAt: null,
+                lastVerificationSentAt: null
             },
         });
         const response: NextResponse = NextResponse.json({

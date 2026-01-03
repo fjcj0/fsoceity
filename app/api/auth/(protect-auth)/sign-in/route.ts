@@ -37,6 +37,8 @@ export async function POST(request: NextRequest) {
         const verificationToken: string = crypto.randomBytes(32).toString("hex");
         const verificationTokenExpiresAt: Date = new Date(Date.now() + 60 * 60 * 1000);
         const code: NumericString = Math.floor(100000 + Math.random() * 900000).toString() as NumericString;
+        const now: Date = new Date();
+        const nextAvailableSend: Date = new Date(now.getTime() + 30_000);
         await prisma.user.update({
             where: {
                 email
@@ -44,7 +46,8 @@ export async function POST(request: NextRequest) {
             data: {
                 verificationToken,
                 verificationTokenExpiresAt,
-                code: code
+                code: code,
+                lastVerificationSentAt: nextAvailableSend
             },
         });
         await sendEmail({
