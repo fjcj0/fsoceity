@@ -11,3 +11,4 @@ export type UserType = {
     profilePicture: string | null,
     bio: string | null,
 } | null | undefined;
+export type NumericString = string & { __brand: "NumericString" };

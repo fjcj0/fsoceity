@@ -12,3 +12,11 @@ export type verificationType = {
     verificationToken: string,
     code: string & { __brand: "NumericString" },
 }
+export type resetType = {
+    newPassword: string,
+    confirm_password: string,
+    resetToken: string
+}
+export type forgetPassType = {
+    email: string & { __brand: "LowercaseOnlyString" }
+}

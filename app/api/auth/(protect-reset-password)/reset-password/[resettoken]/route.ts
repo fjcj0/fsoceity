@@ -1,17 +1,14 @@
 import { prisma } from "@/app/lib/prisma";
-import { blockAuthenticatedUser } from "@/middleware/user.middleware";
 import { NextRequest, NextResponse } from "next/server";
-export async function GET(request: NextRequest, { params }: { params: { verificationtoken: string } }) {
+export default async function GET(request: NextRequest, { params }: { params: { resettoken: string } }) {
     try {
-        const block = await blockAuthenticatedUser(request);
-        if (block) return block;
-        const verificationToken: string = params.verificationtoken;
+        const resetToken: string = params.resettoken;
         const isUserFound: boolean = await prisma.user.findFirst({
             where: {
-                verificationToken,
-                verificationTokenExpiresAt: {
-                    gt: new Date(),
-                },
+                resetToken,
+                resetTokenExpiresAt: {
+                    gt: new Date()
+                }
             }
         }) ? true : false;
         if (!isUserFound) return NextResponse.json({
@@ -28,8 +25,8 @@ export async function GET(request: NextRequest, { params }: { params: { verifica
         });
     } catch (error: unknown) {
         return NextResponse.json({
-            error: `Fatal Error: ${error instanceof Error ? error.message : error}`,
             success: false,
+            error: `Fatal Error: ${error instanceof Error ? error.message : error}`
         }, { status: 500 });
     }
 }

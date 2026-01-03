@@ -17,8 +17,8 @@ export async function middleware(request: NextRequest) {
         const headers = new Headers(request.headers);
         headers.set('x-user', JSON.stringify(user));
         return NextResponse.next({ request: { headers } });
-    } catch {
-        return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
+    } catch (error: unknown) {
+        return NextResponse.json({ success: false, error: `Fatal Error: ${error instanceof Error ? error.message : error}` }, { status: 500 });
     }
 }
 export const config = {

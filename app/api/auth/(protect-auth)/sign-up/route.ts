@@ -2,9 +2,15 @@ import { signUpType } from "@/types/auth_types";
 import crypto from "crypto";
 import { prisma } from "@/app/lib/prisma";
 import bcrypt from 'bcryptjs';
-import { NextResponse } from 'next/server';
-export async function POST(request: Request) {
+import { NextRequest, NextResponse } from 'next/server';
+import { blockAuthenticatedUser } from "@/middleware/user.middleware";
+import { NumericString } from "@/global";
+import { sendEmail } from "@/utils/sendEmail";
+import SendCode from "@/template/email/verification-code/SendCode";
+export async function POST(request: NextRequest) {
     try {
+        const block = await blockAuthenticatedUser(request);
+        if (block) return block;
         const { name, email, password, confirm_password } = await request.json() as signUpType;
         if (!name || !email || !password || !confirm_password) {
             return NextResponse.json(
@@ -33,8 +39,8 @@ export async function POST(request: Request) {
         }
         const verificationToken: string = crypto.randomBytes(32).toString("hex");
         const verificationTokenExpiresAt: Date = new Date(Date.now() + 60 * 60 * 1000);
-        const code: string = Math.floor(100000 + Math.random() * 900000).toString();
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const code: NumericString = Math.floor(100000 + Math.random() * 900000).toString() as NumericString;
+        const hashedPassword: string = await bcrypt.hash(password, 10);
         await prisma.user.create({
             data: {
                 name,
@@ -44,6 +50,12 @@ export async function POST(request: Request) {
                 verificationTokenExpiresAt,
                 code,
             }
+        });
+        await sendEmail({
+            from: process.env.EMAIL_DOMAIN!,
+            to: email,
+            subject: 'Send Verification code from Fsoceity',
+            react: SendCode({ code }),
         });
         return NextResponse.json(
             {

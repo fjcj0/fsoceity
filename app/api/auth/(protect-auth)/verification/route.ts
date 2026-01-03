@@ -1,10 +1,13 @@
 import { prisma } from "@/app/lib/prisma";
 import { UserType } from "@/global";
+import { blockAuthenticatedUser } from "@/middleware/user.middleware";
 import { verificationType } from "@/types/auth_types";
 import { generateTokenAndSetCookie } from "@/utils/generateTokenAndSetCookie";
-import { NextResponse } from "next/server";
-export async function POST(request: Request) {
+import { NextRequest, NextResponse } from "next/server";
+export async function POST(request: NextRequest) {
     try {
+        const block = await blockAuthenticatedUser(request);
+        if (block) return block;
         const { verificationToken, code } = await request.json() as verificationType;
         if (!verificationToken || !code) return NextResponse.json({
             error: `Error filed is missing`,
