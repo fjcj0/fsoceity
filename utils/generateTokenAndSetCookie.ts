@@ -1,20 +1,27 @@
 import { UserType } from "@/global";
 import { NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
-export const generateTokenAndSetCookie = async (response: NextResponse, user: UserType): Promise<void> => {
+import { SignJWT } from 'jose';
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+export const generateTokenAndSetCookie = async (
+    response: NextResponse,
+    user: UserType
+): Promise<void> => {
     try {
-        const token = jwt.sign({ user }, process.env.JWT_SECRET!, {
-            expiresIn: "7d",
-        });
+        const token = await new SignJWT({ user })
+            .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+            .setIssuedAt()
+            .setExpirationTime('7d')
+            .sign(JWT_SECRET);
         response.cookies.set({
-            name: "jwt",
+            name: 'token',
             value: token,
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: 7 * 24 * 60 * 60,
             httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV !== "development",
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV !== 'development',
+            path: '/',
         });
     } catch (error: unknown) {
         throw new Error(error instanceof Error ? error.message : String(error));
     }
-}
+};

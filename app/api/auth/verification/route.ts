@@ -30,6 +30,15 @@ export async function POST(request: Request) {
             success: false,
             error: `Error code is invaild or expiration time is end`
         }, { status: 400 });
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                verificationToken: null,
+                verificationTokenExpiresAt: null,
+                resetToken: null,
+                resetTokenExpiresAt: null
+            },
+        });
         const response: NextResponse = NextResponse.json({
             message: 'Login Successfully',
             success: true,

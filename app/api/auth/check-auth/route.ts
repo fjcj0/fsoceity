@@ -3,22 +3,28 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
     try {
         const userHeader = request.headers.get('x-user');
-        const user: UserType = userHeader ? JSON.parse(userHeader) : null;
-        if (!user) return NextResponse.json(
-            { success: false, error: 'Unauthorized' },
-            { status: 401 });
-        return NextResponse.json({
-            message: 'User Authorized Successfully',
-            success: true,
-            user,
-        }, { status: 200 });
+        const user: UserType | null = userHeader ? JSON.parse(userHeader) : null;
+        if (!user) {
+            return NextResponse.json(
+                { success: false, error: 'Unauthorized' },
+                { status: 401 }
+            );
+        }
+        return NextResponse.json(
+            {
+                message: 'User Authorized Successfully',
+                success: true,
+                user,
+            },
+            { status: 200 }
+        );
     } catch (error) {
         return NextResponse.json(
             {
                 success: false,
-                error: `Fatal Error: ${error instanceof Error ? error.message : error
-                    }`,
-            }, { status: 500 }
+                error: `Fatal Error: ${error instanceof Error ? error.message : error}`,
+            },
+            { status: 500 }
         );
     }
 }
