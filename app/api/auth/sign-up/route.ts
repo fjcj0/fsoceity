@@ -43,14 +43,7 @@ export async function POST(request: Request) {
                 verificationToken,
                 verificationTokenExpiresAt,
                 code,
-            },
-            select: {
-                name: true,
-                email: true,
-                verificationToken: true,
-                verificationTokenExpiresAt: true,
-                code: true,
-            },
+            }
         });
         return NextResponse.json(
             {
@@ -59,7 +52,7 @@ export async function POST(request: Request) {
                 success: true
             },
             {
-                status: 200
+                status: 203
             }
         );
     } catch (error: unknown) {

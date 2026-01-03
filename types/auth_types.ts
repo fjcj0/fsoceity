@@ -8,3 +8,7 @@ export type signInType = {
     email: string,
     password: string,
 }
+export type verificationType = {
+    verificationToken: string,
+    code: string
+}
