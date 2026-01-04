@@ -1,3 +1,4 @@
+import { prisma } from '@/app/lib/prisma';
 import { UserType } from '@/global';
 import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
@@ -10,13 +11,20 @@ export async function GET(request: NextRequest) {
                 { status: 401 }
             );
         }
-        return NextResponse.json(
+        return await prisma.user.findUnique({
+            where: {
+                id: user.id
+            }
+        }) ? NextResponse.json(
             {
                 message: 'User Authorized Successfully',
                 success: true,
                 user,
             },
             { status: 200 }
+        ) : NextResponse.json(
+            { success: false, error: 'Unauthorized' },
+            { status: 401 }
         );
     } catch (error) {
         return NextResponse.json(
