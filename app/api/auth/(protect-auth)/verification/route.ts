@@ -43,10 +43,18 @@ export async function POST(request: NextRequest) {
                 lastVerificationSentAt: null,
                 code: null
             },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                profilePicture: true,
+                bio: true,
+            }
         });
         const response: NextResponse = NextResponse.json({
             message: 'Login Successfully',
             success: true,
+            user
         }, {
             status: 200
         });
