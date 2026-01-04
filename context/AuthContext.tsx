@@ -2,6 +2,7 @@
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import useAuthStore from "@/store/AuthStore";
+import LoaderSpinner from "@/tools/LoaderSpinner";
 type AuthContextType = {};
 const AuthContext = createContext<AuthContextType | null>(null);
 const authOnlyPublicPrefixes = [
@@ -49,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (isVerifying) {
         return (
             <div className="w-screen h-screen bg-black flex items-center justify-center">
-                <h1 className="text-white">Wait...</h1>
+                <LoaderSpinner />
             </div>
         );
     }
