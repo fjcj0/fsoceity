@@ -1,77 +1,157 @@
 import { create } from "zustand";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { AuthStoreInterface } from "@/types/auth_store_type";
-import { NumericString, SERVER } from "@/global";
+import { NumericString, SERVER, UserType } from "@/global";
 axios.defaults.withCredentials = true;
 const API = `${SERVER}/api/auth`;
-const useHeaderStore = create<AuthStoreInterface>((set) => ({
+const useAuthStore = create<AuthStoreInterface>((set) => ({
+    isCheckingPage: false,
     isAuth: false,
     isVerifying: true,
     isLoadingAuth: false,
     error: null,
     user: null,
     checkAuth: async () => {
+        set({ isVerifying: true, error: null });
         try {
-
+            const response = await axios.get(`${API}/check-auth`);
+            set({ user: response?.data?.user, isAuth: true });
         } catch (error: unknown) {
-
+            set({ user: null, isAuth: false });
+            console.log(error);
+        } finally {
+            set({ isVerifying: false });
         }
     },
-    signup: async (name: string, email: string, password: string, confirm_password: string) => {
+    signup: async (name: string, email: string, password: string, confirm_password: string): Promise<void | string> => {
+        set({ isLoadingAuth: true, error: null });
         try {
-
+            const response = await axios.post(`${API}/sign-up`, {
+                name,
+                email,
+                password,
+                confirm_password,
+            });
+            return response?.data?.verificationToken;
         } catch (error: unknown) {
-
+            if (axios.isAxiosError(error)) {
+                set({ error: error.response?.data?.error });
+                return;
+            }
+            set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
+        } finally {
+            set({ isLoadingAuth: false });
         }
     },
-    login: async (email: string, password: string) => {
+    login: async (email: string, password: string): Promise<void | string> => {
+        set({ isLoadingAuth: true, error: null });
         try {
-
+            const response = await axios.post(`${API}/sign-in`, {
+                email,
+                password
+            });
+            return response?.data?.verificationToken;
         } catch (error: unknown) {
-
+            if (axios.isAxiosError(error)) {
+                set({ error: error.response?.data?.error });
+                return;
+            }
+            set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
+        } finally {
+            set({ isLoadingAuth: false });
         }
     },
     logout: async () => {
         try {
-
+            const response = await axios.post(`${API}/logout`);
+            if (response.status === 200) set({ isAuth: false, user: null });
         } catch (error: unknown) {
-
+            console.log(error);
         }
     },
-    checkResetPasswordPage: async (resetToken: string) => {
+    checkResetPasswordPage: async (resetToken: string): Promise<boolean> => {
+        set({ isCheckingPage: true });
         try {
-
+            const response = await axios.get(`${API}/reset-password/${resetToken}`);
+            if (response.status >= 200 && response.status < 300)
+                return true;
         } catch (error: unknown) {
-
+            console.log(error);
+        } finally {
+            set({ isCheckingPage: false });
         }
+        return false;
     },
-    forgetPassword: async (email: string) => {
+    forgetPassword: async (email: string): Promise<boolean> => {
+        set({ isLoadingAuth: true, error: null });
         try {
-
+            const response = await axios.post(`${API}/forget-password`, { email });
+            if (response.status === 200) {
+                return true;
+            }
         } catch (error: unknown) {
-
+            if (axios.isAxiosError(error)) {
+                set({ error: error.response?.data?.error });
+                return false;
+            }
+            set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
+        } finally {
+            set({ isLoadingAuth: false });
         }
+        return false;
     },
     resetPassowrd: async (newPassword: string, confirm_password: string, resetToken: string) => {
+        set({ isLoadingAuth: true, error: null });
         try {
-
+            const response = await axios.post(`${API}/reset-password`, {
+                newPassword,
+                confirm_password,
+                resetToken
+            });
+            if (response.status === 200) {
+                return true;
+            }
         } catch (error: unknown) {
-
+            if (axios.isAxiosError(error)) {
+                set({ error: error.response?.data?.error });
+                return false;
+            }
+            set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
+        } finally {
+            set({ isLoadingAuth: false });
         }
+        return false;
     },
     checkVerificationCodePage: async (verificationToken: string) => {
+        set({ isCheckingPage: true });
         try {
-
+            const response = await axios.get(`${API}/verification/${verificationToken}`);
+            if (response.status === 200) return true;
         } catch (error: unknown) {
-
+            console.log(error);
         }
+        finally {
+            set({ isCheckingPage: false });
+        }
+        return false;
     },
     verifyCode: async (code: NumericString, verificationToken: string) => {
+        set({ isLoadingAuth: true });
         try {
-
+            const response = await axios.post(`${API}/verification`, {
+                code,
+                verificationToken
+            });
+            if (response.status === 200) set({ isVerifying: false, isAuth: true, user: response?.data?.user });
         } catch (error: unknown) {
-
+            if (axios.isAxiosError(error)) {
+                set({ error: error.response?.data?.error });
+                return;
+            }
+            set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
+        } finally {
+            set({ isLoadingAuth: false });
         }
     },
 }));
-export default useHeaderStore;
+export default useAuthStore;

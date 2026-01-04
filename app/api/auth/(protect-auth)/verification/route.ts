@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
                 verificationTokenExpiresAt: null,
                 resetToken: null,
                 resetTokenExpiresAt: null,
-                lastVerificationSentAt: null
+                lastVerificationSentAt: null,
+                code: null
             },
         });
         const response: NextResponse = NextResponse.json({
