@@ -1,7 +1,6 @@
-import React from 'react'
 const LoaderSpinner = () => {
     return (
-        <span className="loader"></span>
-    )
+        <span className="loader" />
+    );
 }
 export default LoaderSpinner;

@@ -15,7 +15,7 @@ export default function Button({
         <>
             <div className="w-full rainbow relative z-0 bg-white/10 overflow-hidden p-0.5 flex items-center justify-center rounded-full transition duration-300 active:scale-100">
                 <button
-                    type="submit"
+                    type="button"
                     disabled={isLoading}
                     onClick={onClick}
                     className={`${isLoading

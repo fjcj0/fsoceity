@@ -3,16 +3,63 @@ import { useState } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import { useRouter } from "next/navigation";
+import useAuthStore from "@/store/AuthStore";
 const SignUp = () => {
+    const { error, isLoadingAuth, signup } = useAuthStore();
     const router = useRouter();
-    const [name, setName] = useState<string>('');
-    const [errorName, setErrorName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [errorEmail, setErrorEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [errorPassword, setErrorPassword] = useState<string>('');
-    const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('');
+    const [name, setName] = useState<string>("");
+    const [errorName, setErrorName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [errorEmail, setErrorEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [errorPassword, setErrorPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>("");
+    const validate = () => {
+        let valid = true;
+        if (!name.trim()) {
+            setErrorName("Name is required");
+            valid = false;
+        } else {
+            setErrorName("");
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.trim()) {
+            setErrorEmail("Email is required");
+            valid = false;
+        } else if (!emailRegex.test(email.toLowerCase())) {
+            setErrorEmail("Invalid email address");
+            valid = false;
+        } else {
+            setErrorEmail("");
+        }
+        if (!password) {
+            setErrorPassword("Password is required");
+            valid = false;
+        } else if (password.length < 6) {
+            setErrorPassword("Password must be at least 6 characters");
+            valid = false;
+        } else {
+            setErrorPassword("");
+        }
+        if (!confirmPassword) {
+            setErrorConfirmPassword("Confirm password is required");
+            valid = false;
+        } else if (password !== confirmPassword) {
+            setErrorConfirmPassword("Passwords do not match");
+            valid = false;
+        } else {
+            setErrorConfirmPassword("");
+        }
+        return valid;
+    };
+    const onSignUp = async () => {
+        if (!validate()) return;
+        const result = await signup(name, email.toLowerCase(), password, confirmPassword);
+        if (typeof result === "string") {
+            router.replace(`/auth/verification-code/${result}`);
+        }
+    };
     return (
         <div className="w-full flex flex-col items-start justify-start gap-5">
             <h1 className="text-start text-3xl font-semibold tracking-tighter bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent">
@@ -55,8 +102,12 @@ const SignUp = () => {
                 type="password"
                 isPassword={true}
             />
-            <Button isLoading={false} title="Sign Up" onClick={async () => { router.replace('/home') }} />
+            <Button
+                isLoading={isLoadingAuth}
+                title="Sign Up"
+                onClick={onSignUp}
+            />
         </div>
     );
-}
+};
 export default SignUp;

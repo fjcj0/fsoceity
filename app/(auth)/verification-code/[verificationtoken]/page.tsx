@@ -8,9 +8,25 @@ const page = () => {
     const [errorCode, setErrorCode] = useState<string>('');
     const params = useParams();
     const verificationtoken = params.verificationtoken;
+    const validate = () => {
+        const codeRegex = /^\d{6}$/;
+        if (!code.trim()) {
+            setErrorCode("Verification code is required");
+            return false;
+        } else if (!codeRegex.test(code)) {
+            setErrorCode("Code must be exactly 6 digits");
+            return false;
+        } else {
+            setErrorCode("");
+            return true;
+        }
+    };
+    const onConfirm = async () => {
+        if (!validate()) return;
+    };
     return (
         <div className="w-screen min-h-screen flex items-center justify-center">
-            <form action="" className="flex flex-col gap-5 bg-[#090909] border-[0.3px] border-white/20 p-5 rounded-xl">
+            <form className="flex flex-col gap-5 bg-[#090909] border-[0.3px] border-white/20 p-5 rounded-xl">
                 <h1 className="text-start text-3xl font-semibold tracking-tighter bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent">
                     <span>Verification</span>
                     <span> Code</span>
@@ -22,11 +38,11 @@ const page = () => {
                     errorState={errorCode}
                     setErrorState={setErrorCode}
                     isPassword={false}
-                    placeholder="Enter verfication code"
+                    placeholder="Enter verification code"
                 />
-                <Button title="Confirm" onClick={async () => console.log('recover')} isLoading={false} />
+                <Button title="Confirm" onClick={onConfirm} isLoading={false} />
             </form>
         </div>
     );
-}
+};
 export default page;
