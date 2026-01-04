@@ -1,6 +1,7 @@
 import { jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from 'next/server';
 import { UserType } from '@/global';
+import { prisma } from './app/lib/prisma';
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 export async function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value;
@@ -14,6 +15,13 @@ export async function middleware(request: NextRequest) {
                 { status: 401 }
             );
         }
+        const isFound: boolean = await prisma.user.findUnique({
+            where: {
+                id: user.id,
+            }
+        }) ? true : false;
+        if (!isFound) return NextResponse.json({ success: false, error: 'Unauthorized or exipration time is end' },
+            { status: 401 });
         const headers = new Headers(request.headers);
         headers.set('x-user', JSON.stringify(user));
         return NextResponse.next({ request: { headers } });
