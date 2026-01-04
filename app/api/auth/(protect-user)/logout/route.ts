@@ -1,15 +1,26 @@
+import { authMiddleware } from "@/middleware/auth.middleware";
 import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
     try {
-        const response: NextResponse = NextResponse.json({
-            success: true,
-            message: `User logged out successfully`
-        }, { status: 200 });
+        const result = await authMiddleware(request);
+        if (result instanceof NextResponse) return result;
+        const { user } = result;
+        const response = NextResponse.json(
+            {
+                success: true,
+                message: `User logged out successfully`,
+            },
+            { status: 200 }
+        );
         response.cookies.delete('token');
         return response;
     } catch (error: unknown) {
-        return NextResponse.json({
-            error: `Fatal Error: ${error instanceof Error ? error.message : error}`
-        }, { status: 500 });
+        return NextResponse.json(
+            {
+                success: false,
+                error: `Fatal Error: ${error instanceof Error ? error.message : error}`,
+            },
+            { status: 500 }
+        );
     }
 }
