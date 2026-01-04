@@ -12,3 +12,4 @@ export type UserType = {
     bio: string | null,
 } | null | undefined;
 export type NumericString = string & { __brand: "NumericString" };
+export const SERVER: string = process.env.NODE_ENV !== 'development' ? '' : 'http://localhost:3000'
