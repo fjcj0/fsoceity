@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Loader from "./Loader";
-
 export default function Button({
     title,
     onClick,

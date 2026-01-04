@@ -1,10 +1,9 @@
 import Image from "next/image";
-interface ContactChatProps {
+const ContactChat = ({ name, avatar, status }: {
     name: string;
     avatar?: string;
     status: "online" | "offline";
-}
-const ContactChat = ({ name, avatar, status }: ContactChatProps) => {
+}) => {
     return (
         <div className="w-full flex items-center border-r-[0.5px] border-r-transparent hover:bg-[#242424]/60 hover:border-r-white duration-300 ease-in cursor-pointer">
             <div className="relative flex items-center max-lg:items-start max-lg:flex-col gap-x-2 pl-3 py-2">

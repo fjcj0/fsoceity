@@ -1,0 +1,17 @@
+import { NumericString, UserType } from "@/global";
+export interface AuthStoreInterface {
+    isVerifying: boolean,
+    isAuth: boolean,
+    isLoadingAuth: boolean,
+    user: UserType;
+    error: null | string,
+    checkAuth: () => Promise<void>,
+    signup: (name: string, email: string, password: string, confirm_password: string) => Promise<void | string>,
+    login: (email: string, password: string) => Promise<void | string>,
+    logut: () => Promise<void>,
+    checkResetPasswordPage: (resetToken: string) => Promise<void>,
+    forgetPassword: (email: string) => Promise<void>,
+    resetPassowrd: (newPassword: string, confirm_password: string, resetToken: string) => Promise<void>,
+    checkVerificationCodePage: (verificationToken: string) => Promise<void>,
+    verifyCode: (code: NumericString, verificationToken: string) => Promise<void>,
+}

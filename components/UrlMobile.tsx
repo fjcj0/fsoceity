@@ -1,10 +1,8 @@
 "use client";
-
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import useHeaderStore from "@/store/HeaderStore";
-
 const UrlMobile = ({
     title,
     icon: Icon,
