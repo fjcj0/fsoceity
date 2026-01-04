@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { isVerifying, checkAuth, isAuth, isCheckingPage } = useAuthStore();
     useEffect(() => {
         checkAuth();
-    }, [checkAuth]);
+    }, [pathname, checkAuth]);
     useEffect(() => {
         if (isVerifying) return;
         const matches = (prefixes: string[]) => prefixes.some(p => pathname === p || pathname.startsWith(p + "/"));
