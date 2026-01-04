@@ -37,6 +37,10 @@ const SignIn = () => {
     };
     const onSignIn = async () => {
         if (!validate()) return;
+        const result = await login(email, password);
+        if (typeof result === "string") {
+            router.replace(`/verification-code/${result}`);
+        }
     };
     return (
         <div className="w-full flex flex-col items-start justify-start gap-5">
@@ -63,9 +67,13 @@ const SignIn = () => {
                 isPassword={true}
             />
             <Button isLoading={isLoadingAuth} title="Sign In" onClick={onSignIn} />
+            {
+                error &&
+                <p className="text-red-500 text-xs font-light">{error}</p>
+            }
             <div className="w-full flex items-end justify-end">
                 <Link
-                    href="/"
+                    href="/forget-password"
                     className="text-[#A495F9] underline text-sm font-light hover:text-[#A495F9]/50 duration-300 ease transition-all"
                 >
                     Forget password?

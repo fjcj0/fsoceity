@@ -25,7 +25,7 @@ const protectedPrefixes = [
 export function AuthProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
-    const { isVerifying, checkAuth, isAuth } = useAuthStore();
+    const { isVerifying, checkAuth, isAuth, isCheckingPage } = useAuthStore();
     useEffect(() => {
         checkAuth();
     }, [checkAuth]);

@@ -2,7 +2,9 @@ import Image from "next/image";
 import Button from "./Button";
 import { List } from "lucide-react";
 import useHeaderStore from "@/store/HeaderStore";
+import useAuthStore from "@/store/AuthStore";
 const Header = () => {
+    const { logout } = useAuthStore();
     const { toggleHeaderSlide } = useHeaderStore();
     return (
         <div className="w-full mb-10 flex items-center justify-between">
@@ -12,7 +14,7 @@ const Header = () => {
             <div className="flex items-center justify-center gap-3">
                 <Button
                     title="logout"
-                    onClick={async () => console.log('logout')}
+                    onClick={logout}
                     isLoading={false}
                     icon="/logout.png"
                 />

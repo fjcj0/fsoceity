@@ -27,4 +27,5 @@ export interface AuthStoreInterface {
         code: NumericString,
         verificationToken: string
     ) => Promise<void>;
+    resendCode: (verificationToken: string) => Promise<boolean>;
 }

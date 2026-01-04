@@ -2,6 +2,7 @@ import { create } from "zustand";
 import axios, { AxiosError } from "axios";
 import { AuthStoreInterface } from "@/types/auth_store_type";
 import { NumericString, SERVER, UserType } from "@/global";
+import { toast } from 'react-toastify';
 axios.defaults.withCredentials = true;
 const API = `${SERVER}/api/auth`;
 const useAuthStore = create<AuthStoreInterface>((set) => ({
@@ -100,7 +101,7 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
         }
         return false;
     },
-    resetPassowrd: async (newPassword: string, confirm_password: string, resetToken: string) => {
+    resetPassowrd: async (newPassword: string, confirm_password: string, resetToken: string): Promise<boolean> => {
         set({ isLoadingAuth: true, error: null });
         try {
             const response = await axios.post(`${API}/reset-password`, {
@@ -122,10 +123,11 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
         }
         return false;
     },
-    checkVerificationCodePage: async (verificationToken: string) => {
+    checkVerificationCodePage: async (verificationToken: string): Promise<boolean> => {
         set({ isCheckingPage: true });
         try {
             const response = await axios.get(`${API}/verification/${verificationToken}`);
+            console.log(response);
             if (response.status === 200) return true;
         } catch (error: unknown) {
             console.log(error);
@@ -135,14 +137,14 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
         }
         return false;
     },
-    verifyCode: async (code: NumericString, verificationToken: string) => {
+    verifyCode: async (code: NumericString, verificationToken: string): Promise<void> => {
         set({ isLoadingAuth: true });
         try {
             const response = await axios.post(`${API}/verification`, {
                 code,
                 verificationToken
             });
-            if (response.status === 200) set({ isVerifying: false, isAuth: true, user: response?.data?.user });
+            if (response.status === 200) set({ isAuth: true, user: response?.data?.user });
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 set({ error: error.response?.data?.error });
@@ -153,5 +155,24 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
             set({ isLoadingAuth: false });
         }
     },
+    resendCode: async (verificationToken: string): Promise<boolean> => {
+        try {
+            const response = await axios.post(`${API}/resend-verification`, {
+                verificationToken
+            });
+            if (response.status === 200) {
+                toast.success(`The code has been sent to your email`);
+                return true;
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data?.error);
+                return false;
+            }
+            toast.error(`An unexpected error occurred ${error instanceof Error ? error.message : error}`);
+            return false;
+        }
+        return false;
+    }
 }));
 export default useAuthStore;

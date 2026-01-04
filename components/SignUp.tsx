@@ -57,7 +57,7 @@ const SignUp = () => {
         if (!validate()) return;
         const result = await signup(name, email.toLowerCase(), password, confirmPassword);
         if (typeof result === "string") {
-            router.replace(`/auth/verification-code/${result}`);
+            router.replace(`/verification-code/${result}`);
         }
     };
     return (
@@ -107,6 +107,10 @@ const SignUp = () => {
                 title="Sign Up"
                 onClick={onSignUp}
             />
+            {
+                error &&
+                <p className="text-red-500 text-xs font-light">{error}</p>
+            }
         </div>
     );
 };
