@@ -192,12 +192,12 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
         }
         return false;
     },
-    editUserData: async (name: string, content: string): Promise<void> => {
+    editUserData: async (name: string, bio: string): Promise<void> => {
         set({ isEditingData: true });
         try {
             const response = await axios.post(`${API}/edit-information`, {
                 name,
-                content
+                bio
             });
             if (response.status === 200) {
                 set({ user: response.data.user });

@@ -1,18 +1,62 @@
 "use client";
+
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { liked_posts, saved_posts, types, user_posts } from "@/constants/data";
+import Input from "@/components/Input";
 import NothingToAppear from "@/components/NothingToAppear";
 import ProfileLiked from "@/components/profile-components/ProfileLiked";
 import { ProfileSaved } from "@/components/profile-components/ProfileSaved";
 import { ProfilePost } from "@/components/profile-components/ProfilePost";
 import useAuthStore from "@/store/AuthStore";
 import { uploadImage } from "@/utils/uploadImage";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import { liked_posts, saved_posts, types, user_posts } from "@/constants/data";
+const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type }) => {
+    if (type === "likes") {
+        return liked_posts.length === 0 ? (
+            <NothingToAppear header="No Likes Yet" par="You haven't liked any post yet" />
+        ) : (
+            <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
+                {liked_posts.map((liked_post, index) => (
+                    <ProfileLiked key={index} image={liked_post.image} par={liked_post.paragraph} />
+                ))}
+            </div>
+        );
+    }
+    if (type === "posts") {
+        return user_posts.length === 0 ? (
+            <NothingToAppear header="No Posts Yet" par="You haven't posted anything yet" />
+        ) : (
+            <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
+                {user_posts.map((user_post, index) => (
+                    <ProfilePost key={index} image={user_post.image} par={user_post.paragraph} />
+                ))}
+            </div>
+        );
+    }
+    if (type === "saves") {
+        return saved_posts.length === 0 ? (
+            <NothingToAppear header="No Saves Yet" par="You haven't saved any post yet" />
+        ) : (
+            <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
+                {saved_posts.map((saved_post, index) => (
+                    <ProfileSaved key={index} image={saved_post.image} par={saved_post.paragraph} />
+                ))}
+            </div>
+        );
+    }
+    return null;
+};
 const page = () => {
-    const { user, editProfilePicture } = useAuthStore();
+    const { user, editProfilePicture, editUserData, isEditingData } = useAuthStore();
+    const [newName, setNewName] = useState<string>("");
+    const [errorNewName, setErrorNewName] = useState<string>("");
+    const [newBio, setNewBio] = useState<string>("");
+    const [errorNewBio, setErrorNewBio] = useState<string>("");
     const [isChangingPicture, setIsChangingPicture] = useState<boolean>(false);
+    const [statusEdit, setStatusEdit] = useState<"uneditable" | "editable">("uneditable");
+    const [type, setType] = useState<"posts" | "saves" | "likes">("posts");
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -23,7 +67,7 @@ const page = () => {
         try {
             const file = event.target.files?.[0];
             if (file) {
-                const result: string = await uploadImage(file) as string;
+                const result: string = (await uploadImage(file)) as string;
                 await editProfilePicture(result);
                 toast.update(toastId, {
                     render: "Profile picture updated!",
@@ -44,68 +88,14 @@ const page = () => {
             setIsChangingPicture(false);
         }
     };
-    const [type, setType] = useState<'posts' | 'saves' | 'likes'>('posts');
-    const CorrectMessage: React.FC = () => {
-        if (type === "likes") {
-            return (
-                <div>
-                    {liked_posts.length === 0 ? (
-                        <NothingToAppear header="No Likes Yet" par="You haven't liked any post yet" />
-                    ) : (
-                        <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
-                            {liked_posts.map((liked_post, index) => (
-                                <ProfileLiked
-                                    key={index}
-                                    image={liked_post.image}
-                                    par={liked_post.paragraph}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            );
+    const editUserDataInformation = async () => {
+        try {
+            await editUserData(newName, newBio);
+        } catch (error: unknown) {
+            console.log(error);
+        } finally {
+            setStatusEdit("uneditable");
         }
-
-        if (type === "posts") {
-            return (
-                <div>
-                    {user_posts.length === 0 ? (
-                        <NothingToAppear header="No Posts Yet" par="You haven't posted anything yet" />
-                    ) : (
-                        <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
-                            {user_posts.map((user_post, index) => (
-                                <ProfilePost
-                                    key={index}
-                                    image={user_post.image}
-                                    par={user_post.paragraph}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        if (type === "saves") {
-            return (
-                <div>
-                    {saved_posts.length === 0 ? (
-                        <NothingToAppear header="No Saves Yet" par="You haven't saved any post yet" />
-                    ) : (
-                        <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
-                            {saved_posts.map((saved_post, index) => (
-                                <ProfileSaved
-                                    key={index}
-                                    image={saved_post.image}
-                                    par={saved_post.paragraph}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            );
-        }
-        return null;
     };
     return (
         <div className="w-full flex flex-col items-center justify-start">
@@ -114,11 +104,12 @@ const page = () => {
                     <button
                         disabled={isChangingPicture}
                         type="button"
-                        className={`profile-flash active:scale-75 duration-300 ${isChangingPicture && 'opacity-50 cursor-none'}`}
+                        className={`profile-flash active:scale-75 duration-300 ${isChangingPicture ? "opacity-50 cursor-none" : ""
+                            }`}
                         onClick={handleButtonClick}
                     >
                         <Image
-                            src={user?.profilePicture || '/account.png'}
+                            src={user?.profilePicture || "/account.png"}
                             alt="profile"
                             width={208}
                             height={208}
@@ -126,15 +117,55 @@ const page = () => {
                     </button>
                 </div>
                 <div className="ml-5 max-md:w-full flex flex-col items-start justify-start gap-y-1 my-auto relative">
-                    <h1 className="text-white font-black text-lg md:text-3xl">{user?.name}</h1>
-                    <p className="text-white/60 font-light text-sm">{user?.bio ? user?.bio : 'bio'}</p>
+                    {statusEdit === "editable" ? (
+                        <div className="flex flex-col items-start justify-start w-full gap-y-3 pr-5">
+                            <h1 className="font-bold">Edit Information</h1>
+                            <Input
+                                placeholder="Enter new name"
+                                setValue={setNewName}
+                                value={newName}
+                                setErrorState={setErrorNewName}
+                                errorState={errorNewName}
+                                type="text"
+                                isPassword={false}
+                            />
+                            <Input
+                                placeholder="Enter new bio"
+                                setValue={setNewBio}
+                                value={newBio}
+                                setErrorState={setErrorNewBio}
+                                errorState={errorNewBio}
+                                type="text"
+                                isPassword={false}
+                            />
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-start justify-start w-full">
+                            <h1 className="text-white font-black text-lg md:text-3xl">{user?.name}</h1>
+                            <p className="text-white/60 font-light text-sm">{user?.bio || "bio"}</p>
+                        </div>
+                    )}
                     <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
                         <p>0 <span>Posts</span></p>
                         <p>2 <span>Groups</span></p>
                         <p>10 <span>Contacts</span></p>
                     </div>
                     <div className="mt-3 flex items-start justify-start gap-3 w-full pr-3">
-                        <Button title="Edit Profile" onClick={async () => console.log('edit profile')} isLoading={false} icon="/edit.png" />
+                        {statusEdit === "uneditable" ? (
+                            <Button
+                                title="Edit Profile"
+                                onClick={async () => setStatusEdit("editable")}
+                                isLoading={false}
+                                icon="/edit.png"
+                            />
+                        ) : (
+                            <Button
+                                title="Save"
+                                onClick={editUserDataInformation}
+                                isLoading={isEditingData}
+                                icon="/edit.png"
+                            />
+                        )}
                     </div>
                 </div>
             </div>
@@ -153,7 +184,7 @@ const page = () => {
                         onClick={() => setType(t.type)}
                         className="relative flex flex-col items-center"
                     >
-                        <t.icon size={27} fill={type === t.type ? 'white' : 'none'} />
+                        <t.icon size={27} fill={type === t.type ? "white" : "none"} />
                         {type === t.type && (
                             <div className="absolute w-6 ml-[0.3px] h-[2px] rounded-full bg-white -bottom-1" />
                         )}
@@ -161,7 +192,7 @@ const page = () => {
                 ))}
             </div>
             <div className="w-full mt-13">
-                <CorrectMessage />
+                <CorrectMessage type={type} />
             </div>
         </div>
     );
