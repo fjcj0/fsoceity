@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 axios.defaults.withCredentials = true;
 const API = `${SERVER}/api/auth`;
 const useAuthStore = create<AuthStoreInterface>((set) => ({
+    isPostingContent: false,
     isEditingData: false,
     isCheckingPage: false,
     isAuth: false,
@@ -212,6 +213,24 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
         } finally {
             set({ isEditingData: false });
         }
-    }
+    },
+    postContent: async (image: string, content: string): Promise<void> => {
+        set({ error: null, isPostingContent: true });
+        try {
+            const response = await axios.post(`${API}/post-content`, {
+                image,
+                content
+            });
+            if (response.status === 201) toast.success(response.data.message);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                set({ error: error.response?.data?.error });
+                return;
+            }
+            set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
+        } finally {
+            set({ isPostingContent: false });
+        }
+    },
 }));
 export default useAuthStore;
