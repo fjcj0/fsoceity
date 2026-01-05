@@ -7,7 +7,9 @@ import NothingToAppear from "@/components/NothingToAppear";
 import ProfileLiked from "@/components/profile-components/ProfileLiked";
 import { ProfileSaved } from "@/components/profile-components/ProfileSaved";
 import { ProfilePost } from "@/components/profile-components/ProfilePost";
+import useAuthStore from "@/store/AuthStore";
 const page = () => {
+    const { user } = useAuthStore();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -99,8 +101,8 @@ const page = () => {
                     </button>
                 </div>
                 <div className="ml-5 max-md:w-full flex flex-col items-start justify-start gap-y-1 my-auto relative">
-                    <h1 className="text-white font-black text-lg md:text-3xl">OMAR CODING</h1>
-                    <p className="text-white/60 font-light text-sm">Full-Stack Developer</p>
+                    <h1 className="text-white font-black text-lg md:text-3xl">{user?.name}</h1>
+                    <p className="text-white/60 font-light text-sm">{user?.bio ? user?.bio : 'bio'}</p>
                     <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
                         <p>0 <span>Posts</span></p>
                         <p>2 <span>Groups</span></p>
