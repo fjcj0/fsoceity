@@ -93,7 +93,7 @@ const page = () => {
                         onClick={handleButtonClick}
                     >
                         <Image
-                            src="/profile.jpg"
+                            src={user?.profilePicture || '/account.png'}
                             alt="profile"
                             width={208}
                             height={208}
