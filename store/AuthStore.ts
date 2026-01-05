@@ -176,25 +176,34 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
         return false;
     },
     editProfilePicture: async (imageUrl: string): Promise<boolean> => {
-        set({ isEditingData: true });
         try {
-
-            return true;
+            const response = await axios.post(`${API}/edit-profile-picture`, {
+                imageUrl
+            });
+            if (response.status === 200) {
+                set({ user: response.data.user });
+                return true;
+            }
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 toast.error(error.response?.data?.error);
                 return false;
             }
             toast.error(`An unexpected error occurred ${error instanceof Error ? error.message : error}`);
-        } finally {
-            set({ isEditingData: false });
         }
         return false;
     },
     editUserData: async (name: string, content: string): Promise<void> => {
         set({ isEditingData: true });
         try {
-
+            const response = await axios.post(`${API}/edit-information`, {
+                name,
+                content
+            });
+            if (response.status === 200) {
+                set({ user: response.data.user });
+                toast.success(response.data.message);
+            }
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 toast.error(error.response?.data?.error);

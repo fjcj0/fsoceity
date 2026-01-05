@@ -1,7 +1,7 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import { toast } from "react-toastify";
-const baseUrl = '';
+const baseUrl = '/api';
 export const uploadImage = async (image: File): Promise<void | string> => {
     try {
         const formData = new FormData();
