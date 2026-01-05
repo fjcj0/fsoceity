@@ -3,21 +3,52 @@ import Button from "./Button";
 import { List } from "lucide-react";
 import useHeaderStore from "@/store/HeaderStore";
 import useAuthStore from "@/store/AuthStore";
+import { useState } from "react";
+import { dummy_notifications } from "@/constants/data";
+import Notification from "./Notification";
 const Header = () => {
     const { logout } = useAuthStore();
     const { toggleHeaderSlide } = useHeaderStore();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     return (
         <div className="w-full mb-10 flex items-center justify-between">
             <div className="flex items-center justify-center">
                 <Image src={'/fsoceity.png'} width={60} height={60} alt="icon" />
             </div>
             <div className="flex items-center justify-center gap-3">
-                <button type="button" className="flex items-center mr-3 justify-center relative cursor-pointer">
-                    <Image src={'/bell.png'} width={30} height={30} alt="bell icon" />
-                    <div className="flex items-center justify-center absolute bg-red-500 w-3 h-3 rounded-full right-0.5  -top-1 bottom-0">
-                        <p className="" style={{ fontSize: 7 }}>0</p>
-                    </div>
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="relative cursor-pointer"
+                >
+                    <Image src="/bell.png" width={30} height={30} alt="bell icon" />
+                    {dummy_notifications.length > 0 && (
+                        <div className="absolute bg-red-500 w-4 h-4 rounded-full right-0 -top-1 flex items-center justify-center">
+                            <p className="text-white text-[9px]">
+                                {dummy_notifications.length}
+                            </p>
+                        </div>
+                    )}
+                    {isOpen && (
+                        <div className="absolute z-40 bg-white flex flex-col py-5 w-52 right-0 top-8 rounded-md shadow-lg">
+                            {dummy_notifications.length > 0 ? (
+                                dummy_notifications.map((not, index) => (
+                                    <Notification
+                                        key={index}
+                                        picture={not.picture}
+                                        by={not.by}
+                                        action={not.action}
+                                    />
+                                ))
+                            ) : (
+                                <p className="px-4 py-2 text-sm text-gray-500">
+                                    No notifications
+                                </p>
+                            )}
+                        </div>
+                    )}
                 </button>
+
                 <Button
                     title="logout"
                     onClick={logout}
@@ -26,7 +57,6 @@ const Header = () => {
                 />
                 <button type="button" onClick={toggleHeaderSlide} className="cursor-pointer active:opacity-50 active:scale-75 duration-300 transition-all md:hidden">
                     <List />
-
                 </button>
             </div>
         </div>

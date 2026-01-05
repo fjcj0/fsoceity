@@ -264,3 +264,25 @@ export const saved_posts = [
         paragraph: "Peaceful lakeside view to save for later"
     }
 ];
+export const dummy_notifications = [
+    {
+        picture: "https://picsum.photos/id/1084/400/400",
+        action: 'Your post like by',
+        by: 'James Willsone'
+    },
+    {
+        picture: "https://picsum.photos/id/109/400/400",
+        action: 'Your post saved by',
+        by: 'Clerk Hinton'
+    },
+    {
+        picture: "https://picsum.photos/id/112/400/400",
+        action: 'Your post like by',
+        by: 'Anjela Carelon'
+    },
+    {
+        picture: "https://picsum.photos/id/116/400/400",
+        action: 'Your post saved by',
+        by: 'John Jack'
+    }
+];
