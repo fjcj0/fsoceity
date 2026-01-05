@@ -1,5 +1,4 @@
-import { Home, MessageSquare, User, LogOut, Users, UserPlus, Bookmark, Heart, Archive } from "lucide-react";
-import { title } from "process";
+import { Home, MessageSquare, User, Users, UserPlus, Bookmark, Heart, Archive, Icon, LeafyGreen } from "lucide-react";
 export const links = [
     {
         icon: Home,
@@ -17,9 +16,11 @@ export const links = [
         isButton: false,
     },
     {
-        icon: LogOut,
-        isButton: true,
+        icon: LeafyGreen,
+        direction: '/requests',
+        isButton: false,
     }
+
 ];
 export const links_chat = [
     {
@@ -59,6 +60,11 @@ export const mobile_links = [
         title: 'Groups',
         icon: Users,
         direction: '/groups',
+    },
+    {
+        title: 'Requests',
+        icon: LeafyGreen,
+        direction: '/requests',
     },
 ];
 export const posts = [

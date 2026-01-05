@@ -159,12 +159,20 @@ const page = () => {
                                 icon="/edit.png"
                             />
                         ) : (
-                            <Button
-                                title="Save"
-                                onClick={editUserDataInformation}
-                                isLoading={isEditingData}
-                                icon="/edit.png"
-                            />
+                            <div className="w-full flex gap-x-3">
+                                <Button
+                                    title="Cancel"
+                                    onClick={async () => setStatusEdit('uneditable')}
+                                    isLoading={false}
+                                    icon="/cancel.png"
+                                />
+                                <Button
+                                    title="Save"
+                                    onClick={editUserDataInformation}
+                                    isLoading={isEditingData}
+                                    icon="/edit.png"
+                                />
+                            </div>
                         )}
                     </div>
                 </div>
