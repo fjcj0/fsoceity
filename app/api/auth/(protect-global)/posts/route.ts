@@ -1,13 +1,13 @@
 import { prisma } from "@/app/lib/prisma";
 import { authMiddleware } from "@/middleware/auth.middleware";
 import { NextRequest, NextResponse } from "next/server";
-export async function GET(req: NextRequest) {
-    const { user, error } = await authMiddleware(req);
+export async function GET(request: NextRequest) {
+    const { user, error } = await authMiddleware(request);
     if (error || !user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const limit = Number(req.nextUrl.searchParams.get("limit")) || 5;
-    const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+    const limit = Number(request.nextUrl.searchParams.get("limit")) || 5;
+    const cursor = request.nextUrl.searchParams.get("cursor") || undefined;
     try {
         const posts = await prisma.post.findMany({
             take: limit + 1,

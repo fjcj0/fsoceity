@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState, useCallback } from "react";
 import Media from "@/components/home-components/Media";
 import Post from "@/components/home-components/Post";
