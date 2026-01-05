@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 axios.defaults.withCredentials = true;
 const API = `${SERVER}/api/auth`;
 const useAuthStore = create<AuthStoreInterface>((set) => ({
+    isEditingData: false,
     isCheckingPage: false,
     isAuth: false,
     isVerifying: true,
@@ -173,6 +174,36 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
             return false;
         }
         return false;
+    },
+    editProfilePicture: async (imageUrl: string): Promise<boolean> => {
+        set({ isEditingData: true });
+        try {
+
+            return true;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data?.error);
+                return false;
+            }
+            toast.error(`An unexpected error occurred ${error instanceof Error ? error.message : error}`);
+        } finally {
+            set({ isEditingData: false });
+        }
+        return false;
+    },
+    editUserData: async (name: string, content: string): Promise<void> => {
+        set({ isEditingData: true });
+        try {
+
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data?.error);
+                return;
+            }
+            toast.error(`An unexpected error occurred ${error instanceof Error ? error.message : error}`);
+        } finally {
+            set({ isEditingData: false });
+        }
     }
 }));
 export default useAuthStore;

@@ -1,5 +1,6 @@
 import { NumericString, UserType } from "@/global";
 export interface AuthStoreInterface {
+    isEditingData: boolean,
     isCheckingPage: boolean,
     isVerifying: boolean;
     isAuth: boolean;
@@ -28,4 +29,6 @@ export interface AuthStoreInterface {
         verificationToken: string
     ) => Promise<void>;
     resendCode: (verificationToken: string) => Promise<boolean>;
+    editProfilePicture: (imageUrl: string) => Promise<boolean>;
+    editUserData: (name: string, bio: string) => Promise<void>;
 }
