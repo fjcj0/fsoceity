@@ -6,7 +6,7 @@
   "dev": "next dev",
   "build": "next build",
   "start": "next start",
-  "postinstall": "prisma generate",
+  "postinstall": "npx prisma generate && cp node_modules/@prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node /workspaces/src/prisma/node_modules/@prisma/client/",
   "lint": "eslint"
   },
   "dependencies": {
