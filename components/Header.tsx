@@ -48,7 +48,6 @@ const Header = () => {
                         </div>
                     )}
                 </button>
-
                 <Button
                     title="logout"
                     onClick={logout}
@@ -60,6 +59,6 @@ const Header = () => {
                 </button>
             </div>
         </div>
-    )
+    );
 }
 export default Header;
