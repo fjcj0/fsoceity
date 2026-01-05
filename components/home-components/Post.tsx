@@ -2,6 +2,7 @@
 import { Bookmark, Heart } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+
 const Post = ({
     name,
     profilePicture,
@@ -37,28 +38,30 @@ const Post = ({
                         <Image
                             src={profilePicture}
                             alt={name}
-                            fill
-                            className="object-cover"
+                            className="w-full h-full"
+                            objectFit="cover"
+                            width={200}
+                            height={200}
                         />
                     </div>
                     <span className="font-semibold">{name}</span>
                 </div>
                 {paragraph && (
-                    <p className="text-gray-200 text-sm font-light">
-                        {paragraph}
-                    </p>
+                    <p className="text-gray-200 text-sm font-light">{paragraph}</p>
                 )}
                 {image && (
-                    <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden">
+                    <div className="w-full relative">
                         <Image
                             src={image}
                             alt="Post image"
-                            fill
-                            className="object-cover"
+                            width={600}
+                            height={600}
+                            className="w-full h-auto rounded-lg"
+                            style={{ objectFit: "contain" }}
                         />
                     </div>
                 )}
-                <div className="flex items-center justify-between text-gray-300">
+                <div className="flex items-center justify-between text-gray-300 mt-2">
                     <button
                         type="button"
                         onClick={toggleLike}
