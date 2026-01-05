@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -11,15 +11,31 @@ import { ProfilePost } from "@/components/profile-components/ProfilePost";
 import useAuthStore from "@/store/AuthStore";
 import { uploadImage } from "@/utils/uploadImage";
 import { toast } from "react-toastify";
-import { liked_posts, saved_posts, types, user_posts } from "@/constants/data";
+import { types } from "@/constants/data";
+import LoaderComponent from "@/tools/LoaderComponent";
 const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type }) => {
+    const { getUserContent, isLoadingUserContents, user_likes, user_bookmarks, user_posts } = useAuthStore();
+    useEffect(() => {
+        getUserContent();
+    }, []);
+    if (isLoadingUserContents) {
+        return (
+            <div className="grid md:grid-cols-4 grid-cols-2 gap-3 w-full">
+                {
+                    Array.from([1, 2, 3, 4, 5, 6, 7, 8]).map((arr, index) => (
+                        <LoaderComponent key={index} />
+                    ))
+                }
+            </div>
+        );
+    }
     if (type === "likes") {
-        return liked_posts.length === 0 ? (
+        return user_likes.length === 0 ? (
             <NothingToAppear header="No Likes Yet" par="You haven't liked any post yet" />
         ) : (
             <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
-                {liked_posts.map((liked_post, index) => (
-                    <ProfileLiked key={index} image={liked_post.image} par={liked_post.paragraph} />
+                {user_likes.map((liked_post, index) => (
+                    <ProfileLiked key={index} image={liked_post.image} par={liked_post.content} />
                 ))}
             </div>
         );
@@ -30,18 +46,18 @@ const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type 
         ) : (
             <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
                 {user_posts.map((user_post, index) => (
-                    <ProfilePost key={index} image={user_post.image} par={user_post.paragraph} />
+                    <ProfilePost key={index} image={user_post.image} par={user_post.content} />
                 ))}
             </div>
         );
     }
     if (type === "saves") {
-        return saved_posts.length === 0 ? (
+        return user_bookmarks.length === 0 ? (
             <NothingToAppear header="No Saves Yet" par="You haven't saved any post yet" />
         ) : (
             <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
-                {saved_posts.map((saved_post, index) => (
-                    <ProfileSaved key={index} image={saved_post.image} par={saved_post.paragraph} />
+                {user_bookmarks.map((saved_post, index) => (
+                    <ProfileSaved key={index} image={saved_post.image} par={saved_post.content} />
                 ))}
             </div>
         );

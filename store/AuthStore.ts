@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 axios.defaults.withCredentials = true;
 const API = `${SERVER}/api/auth`;
 const useAuthStore = create<AuthStoreInterface>((set) => ({
+    isLoadingUserContents: false,
     isPostingContent: false,
     isEditingData: false,
     isCheckingPage: false,
@@ -14,6 +15,9 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
     isLoadingAuth: false,
     error: null,
     user: null,
+    user_posts: [],
+    user_likes: [],
+    user_bookmarks: [],
     checkAuth: async () => {
         set({ isVerifying: true, error: null });
         try {
@@ -230,6 +234,18 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
             set({ error: `An unexpected error occurred ${error instanceof Error ? error.message : error}` });
         } finally {
             set({ isPostingContent: false });
+        }
+    },
+    getUserContent: async (): Promise<void> => {
+        set({ isLoadingUserContents: true });
+        try {
+            const response = await axios.get(`${API}/post-content`);
+            set({ user_posts: response.data.user_posts, user_likes: response.data.user_likes, user_bookmarks: response.data.user_bookmarks });
+
+        } catch (error: unknown) {
+            console.log(error);
+        } finally {
+            set({ isLoadingUserContents: false });
         }
     },
 }));

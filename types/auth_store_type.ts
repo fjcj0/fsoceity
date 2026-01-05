@@ -1,5 +1,6 @@
-import { NumericString, UserType } from "@/global";
+import { NumericString, PostUserType, UserType } from "@/global";
 export interface AuthStoreInterface {
+    isLoadingUserContents: boolean,
     isPostingContent: boolean,
     isEditingData: boolean,
     isCheckingPage: boolean,
@@ -8,6 +9,9 @@ export interface AuthStoreInterface {
     isLoadingAuth: boolean;
     user: UserType | null;
     error: string | null;
+    user_posts: PostUserType[],
+    user_likes: PostUserType[],
+    user_bookmarks: PostUserType[],
     checkAuth: () => Promise<void>;
     signup: (
         name: string,
@@ -33,4 +37,5 @@ export interface AuthStoreInterface {
     editProfilePicture: (imageUrl: string) => Promise<boolean>;
     editUserData: (name: string, bio: string) => Promise<void>;
     postContent: (image: string, content: string) => Promise<void>;
+    getUserContent: () => Promise<void>;
 }
