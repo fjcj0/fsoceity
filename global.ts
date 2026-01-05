@@ -18,7 +18,17 @@ export type PostUserType = {
     authorId: string
 };
 export type PostType = {
-
+    id: string;
+    authorId: string;
+    content: string;
+    image: string | null;
+    createdAt: string;
+    likes: { userId: string }[];
+    bookmarks: any[];
+    author: {
+        name: string;
+        profilePicture: string;
+    };
 };
 export type NumericString = string & { __brand: "NumericString" };
 export const SERVER: string = process.env.NODE_ENV !== 'development' ? '' : 'http://localhost:3000'
