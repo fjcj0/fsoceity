@@ -38,4 +38,5 @@ export interface AuthStoreInterface {
     editUserData: (name: string, bio: string) => Promise<void>;
     postContent: (image: string, content: string) => Promise<void>;
     getUserContent: () => Promise<void>;
+    deletePost: (id: string) => Promise<void>;
 }

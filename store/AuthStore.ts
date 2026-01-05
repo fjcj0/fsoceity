@@ -248,5 +248,18 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
             set({ isLoadingUserContents: false });
         }
     },
+    deletePost: async (id: string): Promise<void> => {
+        try {
+            const response = await axios.delete(`${API}/delete-post/${id}`);
+            if (response.status === 200) {
+                set((state) => ({
+                    user_posts: state.user_posts.filter(post => post.id !== id),
+                }));
+                toast.success(`The post deleted successfully`);
+            }
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    },
 }));
 export default useAuthStore;

@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
@@ -46,7 +45,7 @@ const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type 
         ) : (
             <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
                 {user_posts.map((user_post, index) => (
-                    <ProfilePost key={index} image={user_post.image} par={user_post.content} />
+                    <ProfilePost key={index} id={user_post.id} image={user_post.image} par={user_post.content} />
                 ))}
             </div>
         );

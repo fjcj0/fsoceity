@@ -1,6 +1,21 @@
+"use client";
 import Image from "next/image";
 import Button from "../Button";
-export const ProfilePost = ({ image, par }: { image?: string; par?: string }) => {
+import { useState } from "react";
+import useAuthStore from "@/store/AuthStore";
+export const ProfilePost = ({ id, image, par }: { id: string, image?: string; par?: string }) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { deletePost } = useAuthStore();
+    const onDeletePost = async () => {
+        setIsLoading(true);
+        try {
+            await deletePost(id);
+        } catch (error: unknown) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
     return (
         <div className="w-full bg-black flex flex-col items-end justify-end p-3 gap-y-5 rounded-xl">
             {image ? (
@@ -27,8 +42,8 @@ export const ProfilePost = ({ image, par }: { image?: string; par?: string }) =>
                     <Button
                         title="Delete Post"
                         icon="/trash.png"
-                        isLoading={false}
-                        onClick={async () => console.log("Delete this post")}
+                        isLoading={isLoading}
+                        onClick={onDeletePost}
                     />
                 </div>
             )}
