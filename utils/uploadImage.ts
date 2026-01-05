@@ -5,14 +5,13 @@ const baseUrl = '/api';
 export const uploadImage = async (image: File): Promise<void | string> => {
     try {
         const formData = new FormData();
-        formData.append('image', image);
+        formData.append('file', image);
         const response = await axios.post(`${baseUrl}/upload-image`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
         if (response.status === 200) {
-            toast.success('Image uploaded successfully');
             return response.data.image;
         }
     } catch (error: unknown) {

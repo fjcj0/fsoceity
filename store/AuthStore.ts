@@ -189,7 +189,6 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
                 toast.error(error.response?.data?.error);
                 return false;
             }
-            toast.error(`An unexpected error occurred ${error instanceof Error ? error.message : error}`);
         }
         return false;
     },

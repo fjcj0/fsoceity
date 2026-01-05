@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
       'images.pexels.com',
       'images.unsplash.com',
       'randomuser.me',
-      'picsum.photos'
+      'picsum.photos',
+      'res.cloudinary.com'
     ],
   },
 };

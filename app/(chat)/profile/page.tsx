@@ -8,16 +8,40 @@ import ProfileLiked from "@/components/profile-components/ProfileLiked";
 import { ProfileSaved } from "@/components/profile-components/ProfileSaved";
 import { ProfilePost } from "@/components/profile-components/ProfilePost";
 import useAuthStore from "@/store/AuthStore";
+import { uploadImage } from "@/utils/uploadImage";
+import { toast } from 'react-toastify';
 const page = () => {
-    const { user } = useAuthStore();
+    const { user, editProfilePicture } = useAuthStore();
+    const [isChangingPicture, setIsChangingPicture] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleButtonClick = () => {
         fileInputRef.current?.click();
     };
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            console.log("Selected file:", file);
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const toastId = toast.loading("Wait, the image is uploading...");
+        setIsChangingPicture(true);
+        try {
+            const file = event.target.files?.[0];
+            if (file) {
+                const result: string = await uploadImage(file) as string;
+                await editProfilePicture(result);
+                toast.update(toastId, {
+                    render: "Profile picture updated!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 3000,
+                });
+            }
+        } catch (error: unknown) {
+            console.log(error);
+            toast.update(toastId, {
+                render: "Failed to upload image",
+                type: "error",
+                isLoading: false,
+                autoClose: 3000,
+            });
+        } finally {
+            setIsChangingPicture(false);
         }
     };
     const [type, setType] = useState<'posts' | 'saves' | 'likes'>('posts');
@@ -88,8 +112,9 @@ const page = () => {
             <div className="w-full flex max-md:flex-col items-start justify-start">
                 <div>
                     <button
+                        disabled={isChangingPicture}
                         type="button"
-                        className="profile-flash active:scale-75 duration-300"
+                        className={`profile-flash active:scale-75 duration-300 ${isChangingPicture && 'opacity-50 cursor-none'}`}
                         onClick={handleButtonClick}
                     >
                         <Image
