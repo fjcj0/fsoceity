@@ -1,61 +1,63 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useEffect, useRef, useState, useCallback } from "react";
 import Media from "@/components/home-components/Media";
 import Post from "@/components/home-components/Post";
 import LoaderSpinner from "@/tools/LoaderSpinner";
 import { PostType } from "@/global";
-export default function page() {
+export default function Page() {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const loaderRef = useRef<HTMLDivElement | null>(null);
+    const [loading, setLoading] = useState(false);
+    const loaderRef = useRef<HTMLDivElement>(null);
+    const fetchingRef = useRef(false);
     const fetchPosts = useCallback(async () => {
-        if (loading || !hasMore) return;
+        if (fetchingRef.current || !hasMore) return;
+        fetchingRef.current = true;
         setLoading(true);
         try {
             const res = await fetch(
                 `/api/auth/posts?limit=5${cursor ? `&cursor=${cursor}` : ""}`
             );
             const data = await res.json();
-            setPosts((prev) => {
-                const newPosts = data.posts.filter(
-                    (p: PostType) => !prev.some((existing) => existing.id === p.id)
-                );
+            setPosts(prev => {
+                const existingIds = new Set(prev.map(p => p.id));
+                const newPosts = data.posts.filter((p: PostType) => !existingIds.has(p.id));
                 return [...prev, ...newPosts];
             });
             setCursor(data.nextCursor);
             setHasMore(Boolean(data.nextCursor));
-        } catch (error) {
-            console.error("Error fetching posts:", error);
+        } catch (err) {
+            console.error("Failed to fetch posts:", err);
         } finally {
             setLoading(false);
+            fetchingRef.current = false;
         }
-    }, [cursor, loading, hasMore]);
+    }, [cursor, hasMore]);
     useEffect(() => {
         fetchPosts();
-    }, []);
+    }, [fetchPosts]);
     useEffect(() => {
-        if (!hasMore || loading) return;
+        if (!loaderRef.current || !hasMore) return;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    observer.disconnect();
                     fetchPosts();
                 }
             },
-            { rootMargin: "120px" }
+            { rootMargin: "150px" }
         );
-        if (loaderRef.current) observer.observe(loaderRef.current);
+        observer.observe(loaderRef.current);
         return () => observer.disconnect();
-    }, [fetchPosts, hasMore, loading]);
+    }, [loaderRef.current, fetchPosts, hasMore]);
     return (
         <div className="w-full flex flex-col items-center max-w-6xl mx-auto">
             <div className="w-full max-w-2xl">
                 <Media />
             </div>
             <div className="mt-10 w-full grid grid-cols-1 gap-6">
-                {posts.map((post) => (
+                {posts.map(post => (
                     <Post
                         key={post.id}
                         name={post.author.name}
@@ -69,10 +71,7 @@ export default function page() {
                 ))}
             </div>
             {hasMore && (
-                <div
-                    ref={loaderRef}
-                    className="py-6 w-full flex items-center justify-center"
-                >
+                <div ref={loaderRef} className="py-6 flex justify-center">
                     {loading && <LoaderSpinner />}
                 </div>
             )}
