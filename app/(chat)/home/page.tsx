@@ -1,11 +1,10 @@
 "use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import Media from "@/components/home-components/Media";
 import Post from "@/components/home-components/Post";
 import LoaderSpinner from "@/tools/LoaderSpinner";
 import { PostType } from "@/global";
-export default function Page() {
+export default function page() {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -19,7 +18,12 @@ export default function Page() {
                 `/api/auth/posts?limit=5${cursor ? `&cursor=${cursor}` : ""}`
             );
             const data = await res.json();
-            setPosts((prev) => [...prev, ...data.posts]);
+            setPosts((prev) => {
+                const newPosts = data.posts.filter(
+                    (p: PostType) => !prev.some((existing) => existing.id === p.id)
+                );
+                return [...prev, ...newPosts];
+            });
             setCursor(data.nextCursor);
             setHasMore(Boolean(data.nextCursor));
         } catch (error) {
@@ -64,7 +68,6 @@ export default function Page() {
                     />
                 ))}
             </div>
-
             {hasMore && (
                 <div
                     ref={loaderRef}
