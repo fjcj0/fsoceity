@@ -9,13 +9,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model User {
-  id                         String     @id @default(uuid())
+  id                         String          @id @default(uuid())
   name                       String
-  email                      String     @unique
+  email                      String          @unique
   password                   String
   bio                        String?
-  profilePicture             String?    @default("/account.png")
+  profilePicture             String?         @default("/account.png")
   resetToken                 String?
   resetTokenExpiresAt        DateTime?
   lastResetTokenSentAt       DateTime?
@@ -26,21 +32,34 @@ model User {
   posts                      Post[]
   likes                      Like[]
   bookmarks                  Bookmark[]
-  sentRequests               Contact[]  @relation("SentRequests")
-  receivedRequests           Contact[]  @relation("ReceivedRequests")
+  sentFriendRequests         FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests     FriendRequest[] @relation("ReceivedFriendRequests")
+  contacts                   Contact[]       @relation("UserContacts")
+  friends                    Contact[]       @relation("FriendContacts")
+}
+
+model FriendRequest {
+  id         String        @id @default(uuid())
+  senderId   String
+  receiverId String
+  status     RequestStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  sender     User          @relation("SentFriendRequests", fields: [senderId], references: [id])
+  receiver   User          @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+
+  @@unique([senderId, receiverId])
 }
 
 model Contact {
   id        String   @id @default(uuid())
-  senderId  String
-  receiveId String
-  status    String
+  userId    String
+  friendId  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sender    User     @relation("SentRequests", fields: [senderId], references: [id])
-  receiver  User     @relation("ReceivedRequests", fields: [receiveId], references: [id])
+  user      User     @relation("UserContacts", fields: [userId], references: [id])
+  friend    User     @relation("FriendContacts", fields: [friendId], references: [id])
 
-  @@unique([senderId, receiveId])
+  @@unique([userId, friendId])
 }
 
 model Post {
