@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { Server as IOServer } from "socket.io";
+import { Server as IOServer, Socket } from "socket.io";
 import { prisma } from "@/app/lib/prisma";
 declare global {
     var io: IOServer | undefined;
@@ -13,42 +13,54 @@ export async function GET(req: NextRequest) {
                 addTrailingSlash: false,
             });
             global.io = io;
-            io.use((socket, next) => {
-                const userId = socket.handshake.query.userId as string;
+            io.use((socket: Socket, next) => {
+                const userId: string = socket.handshake.query.userId as string;
                 if (!userId) {
                     return next(new Error("Unauthorized"));
                 }
                 socket.data.userId = userId;
                 next();
             });
-            io.on("connection", (socket) => {
+            io.on("connection", (socket: Socket) => {
                 const userId = socket.data.userId as string;
                 socket.join(userId);
                 console.log(`✅ User ${userId} connected (${socket.id})`);
-                socket.on("like", async ({ postId }: { postId: string }) => {
+                socket.on("like", async ({ postId, by }: { postId: string, by: string }) => {
                     const post = await prisma.post.findUnique({
                         where: { id: postId },
-                        select: { authorId: true },
+                        select: { authorId: true, image: true, },
                     });
+                    const liked_post = await prisma.like.create({
+                        data: {
+                            postId,
+                            userId: by,
+                        }
+                    });
+                    io.to(by).emit('liked_posts', { liked_post });
                     if (!post || post.authorId === userId) return;
                     io.to(post.authorId).emit("notification", {
-                        type: "LIKE",
-                        postId,
-                        fromUserId: userId,
-                        createdAt: new Date().toISOString(),
+                        image: post.image,
+                        action: `Your post liked`,
+                        by: by
                     });
                 });
-                socket.on("bookmark", async ({ postId }: { postId: string }) => {
+                socket.on("bookmark", async ({ postId, by }: { postId: string, by: string }) => {
                     const post = await prisma.post.findUnique({
                         where: { id: postId },
-                        select: { authorId: true },
+                        select: { authorId: true, image: true },
                     });
+                    const saved_post = await prisma.bookmark.create({
+                        data: {
+                            postId,
+                            userId: by
+                        }
+                    });
+                    io.to(by).emit("saved_posts", { saved_post });
                     if (!post || post.authorId === userId) return;
                     io.to(post.authorId).emit("notification", {
-                        type: "BOOKMARK",
-                        postId,
-                        fromUserId: userId,
-                        createdAt: new Date().toISOString(),
+                        image: post.image,
+                        action: `Your post saved`,
+                        by: by
                     });
                 });
                 socket.on("disconnect", () => {
