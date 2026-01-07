@@ -6,6 +6,16 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
         const { id } = await context.params;
         const { error, user } = await authMiddleware(request);
         if (error) return error;
+        await prisma.like.deleteMany({
+            where: {
+                postId: id
+            }
+        });
+        await prisma.bookmark.deleteMany({
+            where: {
+                postId: id
+            }
+        });
         await prisma.post.delete({
             where: {
                 id,

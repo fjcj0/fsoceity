@@ -1,9 +1,25 @@
+"use client";
 import Image from "next/image";
 import Button from "../Button";
-const ProfileLiked = ({ image, par }: {
+import useAuthStore from "@/store/AuthStore";
+import { useState } from "react";
+const ProfileLiked = ({ id, image, par }: {
+    id: string,
     image?: string;
     par?: string;
 }) => {
+    const { deleteLike } = useAuthStore();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const onDelete = async () => {
+        setIsLoading(true);
+        try {
+            await deleteLike(id);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
     return (
         <div className="w-full bg-black flex flex-col items-end justify-end p-3 gap-y-5 rounded-xl">
             {image ?
@@ -32,8 +48,8 @@ const ProfileLiked = ({ image, par }: {
                     <Button
                         title="Remove From Likes"
                         icon="/heart.png"
-                        isLoading={false}
-                        onClick={async () => console.log("Remove from liked posts")}
+                        isLoading={isLoading}
+                        onClick={onDelete}
                     />
                 </div>
             )}

@@ -254,6 +254,8 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
             if (response.status === 200) {
                 set((state) => ({
                     user_posts: state.user_posts.filter(post => post.id !== id),
+                    user_likes: state.user_likes.filter(like => like.post.id !== id),
+                    user_bookmarks: state.user_bookmarks.filter(bookmark => bookmark.post.id !== id),
                 }));
                 toast.success(`The post deleted successfully`);
             }
@@ -261,5 +263,31 @@ const useAuthStore = create<AuthStoreInterface>((set) => ({
             console.log(error);
         }
     },
+    deleteLike: async (id: string): Promise<void> => {
+        try {
+            const response = await axios.delete(`${API}/delete-like/${id}`);
+            if (response.status === 200) {
+                set((state) => ({
+                    user_likes: state.user_likes.filter(like => like.id !== id),
+                }));
+                toast.success(`The liked post deleted successfully`);
+            }
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    },
+    deleteBookMark: async (id: string): Promise<void> => {
+        try {
+            const response = await axios.delete(`${API}/delete-save/${id}`);
+            if (response.status === 200) {
+                set((state) => ({
+                    user_bookmarks: state.user_bookmarks.filter(bookmark => bookmark.id !== id),
+                }));
+                toast.success(`The bookmark deleted successfully`);
+            }
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    }
 }));
 export default useAuthStore;

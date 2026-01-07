@@ -39,4 +39,6 @@ export interface AuthStoreInterface {
     postContent: (image: string, content: string) => Promise<void>;
     getUserContent: () => Promise<void>;
     deletePost: (id: string) => Promise<void>;
+    deleteLike: (id: string) => Promise<void>;
+    deleteBookMark: (id: string) => Promise<void>,
 }

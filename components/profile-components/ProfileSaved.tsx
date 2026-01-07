@@ -1,6 +1,21 @@
+"use client";
 import Image from "next/image";
 import Button from "../Button";
-export const ProfileSaved = ({ image, par }: { image?: string; par?: string }) => {
+import useAuthStore from "@/store/AuthStore";
+import { useState } from "react";
+export const ProfileSaved = ({ id, image, par }: { id: string, image?: string; par?: string }) => {
+    const { deleteBookMark } = useAuthStore();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const onDelete = async () => {
+        setIsLoading(true);
+        try {
+            await deleteBookMark(id);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
     return (
         <div className="w-full bg-black flex flex-col items-end justify-end p-3 gap-y-5 rounded-xl">
             {image ? (
@@ -27,8 +42,8 @@ export const ProfileSaved = ({ image, par }: { image?: string; par?: string }) =
                     <Button
                         title="Remove From Saved"
                         icon="/bookmark.png"
-                        isLoading={false}
-                        onClick={async () => console.log("Remove from saved posts")}
+                        isLoading={isLoading}
+                        onClick={onDelete}
                     />
                 </div>
             )}
