@@ -6,13 +6,15 @@ import { useState } from "react";
 const page = () => {
     const [contactName, setContactName] = useState<string>("");
     const [errorContactName, setErrorContactName] = useState<string>("");
-    const [filter, setFilter] = useState<"All" | "Accepted" | "Pending">("All");
+    const [filter, setFilter] = useState<"Notsent" | "Accepted" | "Pending">("Notsent");
     const filteredContacts = dummyContacts.filter((contact) => {
         switch (filter) {
             case "Accepted":
                 return contact.isAccepted;
             case "Pending":
                 return contact.isPending;
+            case "Notsent":
+                return !contact.isSent && !contact.isPending && !contact.isAccepted;
             default:
                 return true;
         }
@@ -34,7 +36,7 @@ const page = () => {
                     value={filter}
                     onChange={(e) => setFilter(e.target.value as any)}
                 >
-                    <option value="All">All</option>
+                    <option value="Notsent">NotSent</option>
                     <option value="Accepted">Accepted</option>
                     <option value="Pending">Pending</option>
                 </select>
