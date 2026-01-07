@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import Slider from "@/components/Slider";
 import { links, links_chat } from "@/constants/data";
 import Header from "@/components/Header";
