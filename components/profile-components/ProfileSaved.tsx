@@ -7,10 +7,10 @@ export const ProfileSaved = ({ image, par }: { image?: string; par?: string }) =
                 <div className="relative w-full">
                     <Image
                         src={image}
-                        alt={par ?? "Saved post image"}
+                        alt={par ?? "User post image"}
                         width={200}
                         height={200}
-                        className="object-cover rounded-xl"
+                        className="w-full h-full rounded-xl"
                     />
                 </div>
             ) : (

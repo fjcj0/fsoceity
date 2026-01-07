@@ -1,4 +1,4 @@
-import { NumericString, PostUserType, UserType } from "@/global";
+import { BookMarkType, LikeType, NumericString, PostUserType, UserType } from "@/global";
 export interface AuthStoreInterface {
     isLoadingUserContents: boolean,
     isPostingContent: boolean,
@@ -10,8 +10,8 @@ export interface AuthStoreInterface {
     user: UserType | null;
     error: string | null;
     user_posts: PostUserType[],
-    user_likes: PostUserType[],
-    user_bookmarks: PostUserType[],
+    user_likes: LikeType[],
+    user_bookmarks: BookMarkType[],
     checkAuth: () => Promise<void>;
     signup: (
         name: string,

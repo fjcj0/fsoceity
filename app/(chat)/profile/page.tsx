@@ -34,7 +34,7 @@ const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type 
         ) : (
             <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
                 {user_likes.map((liked_post, index) => (
-                    <ProfileLiked key={index} image={liked_post.image} par={liked_post.content} />
+                    <ProfileLiked key={index} image={liked_post.post.image} par={liked_post.post.content} />
                 ))}
             </div>
         );
@@ -56,7 +56,7 @@ const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type 
         ) : (
             <div className="grid grid-cols-4 max-md:grid-cols-2 gap-3">
                 {user_bookmarks.map((saved_post, index) => (
-                    <ProfileSaved key={index} image={saved_post.image} par={saved_post.content} />
+                    <ProfileSaved key={index} image={saved_post.post.image} par={saved_post.post.content} />
                 ))}
             </div>
         );

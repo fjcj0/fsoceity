@@ -32,3 +32,23 @@ export type PostType = {
 };
 export type NumericString = string & { __brand: "NumericString" };
 export const SERVER: string = process.env.NODE_ENV !== 'development' ? '' : 'http://localhost:3000'
+export type BookMarkType = {
+    id: string,
+    post: {
+        id: string,
+        content: string,
+        image: string,
+        createdAt: string,
+        authorId: string
+    }
+}
+export type LikeType = {
+    id: string,
+    post: {
+        id: string,
+        content: string,
+        image: string,
+        createdAt: string,
+        authorId: string
+    }
+}

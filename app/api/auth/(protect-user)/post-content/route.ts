@@ -47,8 +47,18 @@ export async function GET(request: NextRequest) {
                 id: user.id,
             }, select: {
                 posts: true,
-                bookmarks: true,
-                likes: true
+                bookmarks: {
+                    select: {
+                        id: true,
+                        post: true,
+                    }
+                },
+                likes: {
+                    select: {
+                        id: true,
+                        post: true,
+                    }
+                }
             }
         });
         return NextResponse.json({
