@@ -64,7 +64,7 @@ const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type 
     return null;
 };
 const page = () => {
-    const { user, editProfilePicture, editUserData, isEditingData } = useAuthStore();
+    const { user, editProfilePicture, editUserData, isEditingData, user_posts } = useAuthStore();
     const [newName, setNewName] = useState<string>("");
     const [errorNewName, setErrorNewName] = useState<string>("");
     const [newBio, setNewBio] = useState<string>("");
@@ -161,7 +161,7 @@ const page = () => {
                         </div>
                     )}
                     <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
-                        <p>0 <span>Posts</span></p>
+                        <p>{user_posts.length} <span>Posts</span></p>
                         <p>2 <span>Groups</span></p>
                         <p>10 <span>Contacts</span></p>
                     </div>
