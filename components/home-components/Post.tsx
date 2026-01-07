@@ -2,8 +2,8 @@
 import { Bookmark, Heart } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-
 const Post = ({
+    id,
     name,
     profilePicture,
     paragraph,
@@ -12,6 +12,7 @@ const Post = ({
     isLiked: initialLiked,
     isBookMarked: initialBookMarked = false,
 }: {
+    id: string;
     name: string;
     profilePicture: string;
     paragraph?: string;
@@ -24,11 +25,10 @@ const Post = ({
     const [bookMarked, setBookMarked] = useState(initialBookMarked);
     const [likes, setLikes] = useState(likesNumber);
     const toggleLike = () => {
-        setLiked((prev) => !prev);
-        setLikes((prev) => (liked ? prev - 1 : prev + 1));
+
     };
     const toggleBookmark = () => {
-        setBookMarked((prev) => !prev);
+
     };
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-y-3 text-white">
@@ -75,6 +75,7 @@ const Post = ({
                         />
                         <span>{likes}</span>
                     </button>
+
                     <button type="button" onClick={toggleBookmark}>
                         <Bookmark
                             size={22}

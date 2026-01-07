@@ -34,6 +34,9 @@ export async function GET(req: NextRequest) {
                         data: {
                             postId,
                             userId: by,
+                        },
+                        select: {
+                            post: true,
                         }
                     });
                     io.to(by).emit('liked_posts', { liked_post });

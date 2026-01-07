@@ -95,6 +95,7 @@ export default function Page() {
                             layout
                         >
                             <Post
+                                id={post.id}
                                 name={post.author.name}
                                 profilePicture={post.author.profilePicture}
                                 paragraph={post.content}
