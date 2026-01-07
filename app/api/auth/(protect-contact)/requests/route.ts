@@ -34,8 +34,11 @@ export async function GET(request: NextRequest) {
                 receiveId: true,
                 receiver: {
                     select: {
+                        id: true,
                         name: true,
                         email: true,
+                        profilePicture: true,
+                        createdAt: true
                     },
                 },
             },
@@ -49,8 +52,11 @@ export async function GET(request: NextRequest) {
                 receiveId: true,
                 receiver: {
                     select: {
+                        id: true,
                         name: true,
                         email: true,
+                        profilePicture: true,
+                        createdAt: true
                     },
                 },
             },
