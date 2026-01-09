@@ -56,11 +56,9 @@ const Post = ({
                     </div>
                     <span className="font-semibold">{name}</span>
                 </div>
-
                 {paragraph && (
                     <p className="text-gray-200 text-sm font-light">{paragraph}</p>
                 )}
-
                 {image && (
                     <div className="w-full relative">
                         <Image
@@ -73,7 +71,6 @@ const Post = ({
                         />
                     </div>
                 )}
-
                 <div className="flex items-center justify-between text-gray-300 mt-2">
                     <button
                         type="button"
@@ -88,7 +85,6 @@ const Post = ({
                         />
                         <span>{likes}</span>
                     </button>
-
                     <button type="button" onClick={toggleBookmark}>
                         <Bookmark
                             size={22}

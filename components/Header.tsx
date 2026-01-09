@@ -14,7 +14,11 @@ const Header = () => {
     const { notifications, setNotifications, socket } = useSocket();
     useEffect(() => {
         if (!socket) return;
-        const handleNotification = (data: any) => {
+        const handleNotification = (data: {
+            image: string,
+            action: string,
+            by: string
+        }) => {
             setNotifications((prev) => [...prev, data]);
         };
         socket.on("notification", handleNotification);
