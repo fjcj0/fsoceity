@@ -52,3 +52,20 @@ export type LikeType = {
         authorId: string
     }
 }
+export type FriendRequestType = {
+    sender: {
+        id: string;
+        name: string;
+        profilePicture: string;
+        createdAt: string;
+    };
+};
+export type ContactType = {
+    id: string;
+    name: string;
+    profilePicture?: string;
+    createdAt: string;
+    isAccepted: boolean;
+    isPending: boolean;
+    isSent: boolean;
+};

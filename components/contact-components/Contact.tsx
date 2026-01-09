@@ -6,14 +6,14 @@ const Contact = ({
     isSent,
     isPending,
     isAccepted,
-    date,
+    createdAt,
 }: {
     name: string;
     profilePicture: string;
     isSent: boolean;
     isPending: boolean;
     isAccepted: boolean;
-    date: string;
+    createdAt: string;
 }) => {
     return (
         <div className="w-full p-4 flex flex-col items-start justify-between bg-black/50 rounded-3xl">
@@ -29,7 +29,7 @@ const Contact = ({
                 <div className="flex flex-col">
                     <h1 className="text-sm">{name}</h1>
                     <p className="text-xs font-light text-white/20">
-                        Joined At: {date}
+                        Joined At: {createdAt}
                     </p>
                 </div>
             </div>

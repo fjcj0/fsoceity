@@ -64,7 +64,7 @@ const CorrectMessage: React.FC<{ type: "posts" | "saves" | "likes" }> = ({ type 
     return null;
 };
 const page = () => {
-    const { user, editProfilePicture, editUserData, isEditingData, user_posts, user_bookmarks, user_likes } = useAuthStore();
+    const { user, editProfilePicture, editUserData, isEditingData, user_posts, user_bookmarks, user_likes, isLoadingUserContents } = useAuthStore();
     const [newName, setNewName] = useState<string>("");
     const [errorNewName, setErrorNewName] = useState<string>("");
     const [newBio, setNewBio] = useState<string>("");
@@ -160,11 +160,13 @@ const page = () => {
                             <p className="text-white/60 font-light text-sm max-w-[95%] mt-2">{user?.bio || "bio"}</p>
                         </div>
                     )}
-                    <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
-                        <p>{user_posts.length} <span>Posts</span></p>
-                        <p>{user_bookmarks.length} <span>Bookmarks</span></p>
-                        <p>{user_likes.length} <span>Postliked</span></p>
-                    </div>
+                    {
+                        isLoadingUserContents ? <p className="mt-2 text-white/50" style={{ fontSize: 15 }}>wait...</p> : <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">
+                            <p>{user_posts.length} <span>Posts</span></p>
+                            <p>{user_bookmarks.length} <span>Saved</span></p>
+                            <p>{user_likes.length} <span>likes</span></p>
+                        </div>
+                    }
                     <div className="mt-3 flex items-start justify-start gap-3 w-full pr-3">
                         {statusEdit === "uneditable" ? (
                             <Button
