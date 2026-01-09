@@ -157,7 +157,7 @@ const page = () => {
                     ) : (
                         <div className="flex flex-col items-start justify-start w-full">
                             <h1 className="text-white font-black text-lg md:text-3xl">{user?.name}</h1>
-                            <p className="text-white/60 font-light text-sm">{user?.bio || "bio"}</p>
+                            <p className="text-white/60 font-light text-sm max-w-[95%] mt-2">{user?.bio || "bio"}</p>
                         </div>
                     )}
                     <div className="flex mt-2 items-start justify-start gap-4 font-semibold text-lg">

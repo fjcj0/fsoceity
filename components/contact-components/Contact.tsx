@@ -16,8 +16,8 @@ const Contact = ({
     date: string;
 }) => {
     return (
-        <div className="w-full p-4 flex max-lg:flex-col items-start lg:items-center justify-between bg-black/50 rounded-3xl">
-            <div className="flex flex-col items-start gap-y-2 lg:w-[30%]">
+        <div className="w-full p-4 flex flex-col items-start justify-between bg-black/50 rounded-3xl">
+            <div className="flex flex-col items-start gap-y-2">
                 <div className="w-20 h-20 relative overflow-hidden rounded-full">
                     <Image
                         src={profilePicture}
@@ -33,7 +33,7 @@ const Contact = ({
                     </p>
                 </div>
             </div>
-            <div className="lg:w-[70%] max-lg:mt-7 lg:self-end lg:ml-2">
+            <div className="mt-4">
                 {!isSent && !isPending && !isAccepted && (
                     <Button
                         icon="/add-user.png"
