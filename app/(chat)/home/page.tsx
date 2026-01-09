@@ -101,8 +101,6 @@ export default function Page() {
                                 paragraph={post.content}
                                 image={post.image || "/account.png"}
                                 likesNumber={post.likes.length}
-                                isLiked={false}
-                                isBookMarked={post.bookmarks.length > 0}
                             />
                         </motion.div>
                     ))}

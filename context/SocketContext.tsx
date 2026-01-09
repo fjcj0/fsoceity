@@ -11,14 +11,25 @@ import { getSocket } from "@/config/socket";
 type SocketContextType = {
     socket: Socket | null;
     connected: boolean;
+    notifications: NotificatioType[];
+    setNotifications: React.Dispatch<React.SetStateAction<NotificatioType[]>>;
 };
+type NotificatioType = {
+    action: string,
+    by: string,
+    image: string
+}
 const SocketContext = createContext<SocketContextType>({
     socket: null,
     connected: false,
+    notifications: [],
+    setNotifications: () => { },
+
 });
 export function SocketProvider({ children }: { children: ReactNode }) {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [connected, setConnected] = useState(false);
+    const [notifications, setNotifications] = useState<NotificatioType[]>([]);
     useEffect(() => {
         const socketInstance = getSocket();
         socketInstance.on("connect", () => {
@@ -35,7 +46,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
     }, []);
     return (
-        <SocketContext.Provider value={{ socket, connected }}>
+        <SocketContext.Provider value={{ socket, connected, notifications, setNotifications }}>
             {children}
         </SocketContext.Provider>
     );
