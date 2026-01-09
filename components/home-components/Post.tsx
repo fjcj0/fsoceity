@@ -22,8 +22,6 @@ const Post = ({
 }) => {
     const { user_likes, user_bookmarks } = useAuthStore();
     const { socket } = useSocket();
-
-    // ✅ Initialize states based on user data
     const [liked, setLiked] = useState(
         user_likes.some((like) => like.post.id === id)
     );
@@ -31,20 +29,17 @@ const Post = ({
         user_bookmarks.some((bookmark) => bookmark.post.id === id)
     );
     const [likes, setLikes] = useState(likesNumber);
-
     const toggleLike = () => {
         if (!socket) return;
         socket.emit('like', id);
         setLiked(!liked);
         setLikes((prev) => (liked ? prev - 1 : prev + 1));
     };
-
     const toggleBookmark = () => {
         if (!socket) return;
         socket.emit('save', id);
         setBookMarked(!bookMarked);
     };
-
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-y-3 text-white">
             <div className="bg-black p-5 rounded-xl flex flex-col gap-4">
