@@ -15,7 +15,7 @@ export type PostUserType = {
     id: string,
     content: string,
     image?: string,
-    authorId: string
+    authorId: string,
 };
 export type PostType = {
     id: string;
@@ -24,7 +24,7 @@ export type PostType = {
     image: string | null;
     createdAt: string;
     likes: { userId: string }[];
-    bookmarks: any[];
+    bookmarks: { userId: string }[];
     author: {
         name: string;
         profilePicture: string;

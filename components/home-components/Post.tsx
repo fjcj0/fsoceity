@@ -1,7 +1,5 @@
 "use client";
-import { saved_posts } from "@/constants/data";
 import { useSocket } from "@/context/SocketContext";
-import useAuthStore from "@/store/AuthStore";
 import { Bookmark, Heart } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,6 +10,8 @@ const Post = ({
     paragraph,
     image,
     likesNumber,
+    isLiked,
+    isSaved
 }: {
     id: string;
     name: string;
@@ -19,26 +19,23 @@ const Post = ({
     paragraph?: string;
     image?: string;
     likesNumber: number;
+    isLiked: boolean,
+    isSaved: boolean
 }) => {
-    const { user_likes, user_bookmarks } = useAuthStore();
+    const [liked, setLiked] = useState<boolean>(isLiked);
+    const [bookMarked, setBookMarked] = useState<boolean>(isSaved);
     const { socket } = useSocket();
-    const [liked, setLiked] = useState(
-        user_likes.some((like) => like.post.id === id)
-    );
-    const [bookMarked, setBookMarked] = useState(
-        user_bookmarks.some((bookmark) => bookmark.post.id === id)
-    );
     const [likes, setLikes] = useState(likesNumber);
     const toggleLike = () => {
         if (!socket) return;
-        socket.emit('like', id);
-        setLiked(!liked);
-        setLikes((prev) => (liked ? prev - 1 : prev + 1));
+        socket.emit("like", id);
+        setLiked(prev => !prev);
+        setLikes(prev => (liked ? prev - 1 : prev + 1));
     };
     const toggleBookmark = () => {
         if (!socket) return;
-        socket.emit('save', id);
-        setBookMarked(!bookMarked);
+        socket.emit("save", id);
+        setBookMarked(prev => !prev);
     };
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-y-3 text-white">

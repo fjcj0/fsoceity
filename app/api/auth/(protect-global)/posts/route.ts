@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
                 image: true,
                 createdAt: true,
                 likes: { select: { userId: true } },
-                bookmarks: true,
+                bookmarks: { select: { userId: true } },
                 author: { select: { name: true, profilePicture: true } },
             },
         });
