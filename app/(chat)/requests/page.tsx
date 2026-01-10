@@ -46,7 +46,7 @@ const page = () => {
                 isPassword={false}
             />
             {isLoading && (
-                <div className="grid md:grid-cols-4 grid-cols-2 gap-3 w-full">
+                <div className="grid md:grid-cols-4 grid-cols-1 gap-3 w-full">
                     {
                         Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).map((arr, index) => (
                             <LoaderComponent key={index} />
@@ -64,10 +64,10 @@ const page = () => {
                             <Request
                                 key={req.sender.id}
                                 name={req.sender.name}
-                                status="pending"
                                 createdAt={req.sender.createdAt}
                                 image={req.sender.profilePicture}
                                 id={req.sender.id}
+                                setFriendRequests={setFriendRequests}
                             />
                         ))
                     )}
