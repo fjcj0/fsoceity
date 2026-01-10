@@ -69,3 +69,11 @@ export type ContactType = {
     isPending: boolean;
     isSent: boolean;
 };
+export type ContactChatType = {
+    user: {
+        id: string;
+        name: string;
+        profilePicture?: string;
+        status: 'online' | 'offline',
+    }
+};

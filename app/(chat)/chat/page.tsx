@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import ContactChat from "@/components/chat-components/ContactChat";
 import GroupChat from "@/components/chat-components/GroupChat";
-import { contacts_chat, groups_chat } from "@/constants/data";
+import { groups_chat } from "@/constants/data";
 import Session from "@/components/chat-components/Session";
 import Lottie from "lottie-react";
 import animation from '../../../animations/Digitalmedia.json';
 import axios from "axios";
 import LoaderChatLayout from "@/tools/LoaderChatLayout";
+import { ContactChatType } from "@/global";
+import ContactChat from "@/components/chat-components/ContactChat";
 axios.defaults.withCredentials = true;
 const page = () => {
     const [type, setType] = useState<"contacts" | "groups">("contacts");
@@ -15,12 +16,12 @@ const page = () => {
     const [isUser, setIsUser] = useState(false);
     const [isCallStarted, setIsCallStarted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState<ContactChatType[]>([]);
     const getContacts = async () => {
         setIsLoading(true);
         try {
             const response = await axios.get(`/api/auth/get-contacts`);
-            setContacts(response.data.contacts);
+            setContacts(response.data.contacts.contacts);
         } catch (error: unknown) {
             console.log(error);
         } finally {
@@ -53,12 +54,13 @@ const page = () => {
                             <div className="col-span-2 bg-black overflow-y-auto">
                                 <div className="mt-6 flex flex-col gap-3">
                                     {type === "contacts"
-                                        ? contacts_chat.map((c) => (
+                                        ? contacts.map((c) => (
                                             <ContactChat
-                                                key={c.id}
-                                                name={c.name}
-                                                avatar={c.avatar}
-                                                status={c.status}
+                                                key={c.user.id}
+                                                id={c.user.id}
+                                                name={c.user.name}
+                                                avatar={c.user.profilePicture}
+                                                status={'online'}
                                             />
                                         ))
                                         : groups_chat.map((g) => (

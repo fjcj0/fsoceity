@@ -1,5 +1,6 @@
 import Image from "next/image";
-const ContactChat = ({ name, avatar, status }: {
+const ContactChat = ({ id, name, avatar, status }: {
+    id: string,
     name: string;
     avatar?: string;
     status: "online" | "offline";
