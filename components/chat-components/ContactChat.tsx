@@ -14,13 +14,13 @@ const ContactChat = ({ name, avatar, status }: {
                             width={43}
                             height={43}
                             alt={name}
-                            className="object-cover w-10 h-10 mx-auto rounded-full"
+                            className="object-cover w-8 h-8 md:w-10 md:h-10 mx-auto rounded-full"
                         />
                     ) : (
                         <span className="text-white text-xs font-bold">{name.charAt(0)}</span>
                     )}
                     <span
-                        className={`absolute top-[0.3rem] -left-0.5 w-3 h-3 rounded-full  ${status === "online" ? "bg-green-400" : "bg-red-400"} md:hidden`}
+                        className={`absolute top-[0.3rem] -left-0.5 w-2 h-2 rounded-full  ${status === "online" ? "bg-green-400" : "bg-red-400"} md:hidden`}
                     />
                 </div>
                 <div className="flex flex-col items-start max-md:hidden">
