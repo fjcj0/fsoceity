@@ -75,12 +75,15 @@ const page = () => {
                         contacts.map((contact) => (
                             <Contact
                                 key={contact.id}
+                                id={contact.id}
                                 name={contact.name}
                                 profilePicture={contact.profilePicture || "/account.png"}
                                 isAccepted={contact.isAccepted}
                                 isPending={contact.isPending}
                                 isSent={contact.isSent}
                                 createdAt={contact.createdAt}
+                                setContacts={setContacts}
+                                type={filter}
                             />
                         ))
                     )}
