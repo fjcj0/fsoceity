@@ -54,15 +54,17 @@ const page = () => {
                             <div className="col-span-2 bg-black overflow-y-auto">
                                 <div className="mt-6 flex flex-col gap-3">
                                     {type === "contacts"
-                                        ? contacts.map((c) => (
-                                            <ContactChat
-                                                key={c.user.id}
-                                                id={c.user.id}
-                                                name={c.user.name}
-                                                avatar={c.user.profilePicture}
-                                                status={'online'}
-                                            />
-                                        ))
+                                        ? (
+                                            contacts.length > 0 &&
+                                            contacts.map((c) => (
+                                                <ContactChat
+                                                    key={c.user.id}
+                                                    id={c.user.id}
+                                                    name={c.user.name}
+                                                    avatar={c.user.profilePicture}
+                                                    status={'online'}
+                                                />
+                                            )))
                                         : groups_chat.map((g) => (
                                             <GroupChat
                                                 key={g.id}
