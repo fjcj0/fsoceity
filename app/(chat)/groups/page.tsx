@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import { dummyGroups } from "@/constants/data";
 import { useState } from "react";
 const page = () => {
+    let devloplemt = true;
     const [groupName, setGroupName] = useState<string>("");
     const [errorGroupName, setErrorGroupName] = useState<string>("");
     const [filter, setFilter] = useState<"All" | "Joined" | "Pending" | "Created" | "NotJoined">("All");
@@ -21,6 +22,11 @@ const page = () => {
                 return true;
         }
     });
+    if (devloplemt) return (
+        <div className="w-full h-full flex items-center justify-center">
+            <h1 className="font-bold text-3xl md:text-5xl">Under development</h1>
+        </div>
+    )
     return (
         <div className="flex flex-col items-start justify-start p-4 w-full">
             <div className="flex items-center justify-start w-full gap-x-2 mb-6">

@@ -28,6 +28,13 @@ export async function authMiddleware(request: NextRequest) {
             where: {
                 id: user.id,
             },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                bio: true,
+                profilePicture: true
+            }
         });
         if (!dbUser) {
             return {
