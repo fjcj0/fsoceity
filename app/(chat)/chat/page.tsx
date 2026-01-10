@@ -76,8 +76,8 @@ const page = () => {
                                     <div className="w-full h-full flex flex-col items-center justify-center">
                                         <Lottie animationData={animation} loop />
                                         <h1
-                                            className="text-center mt-5 text-4xl font-semibold tracking-tighter bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent">
-                                            <span>Start Your First <br /></span>
+                                            className="text-center mt-5 text-3xl md:text-5xl font-semibold tracking-tighter bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent">
+                                            <span>Start Your First Chat <br /></span>
                                             <span> On Fsoceity<br /></span>
                                         </h1>                            </div>
                                 ) : (
