@@ -3,22 +3,22 @@ import axios from "axios";
 import Image from "next/image";
 import { ContactMessageType } from "@/global";
 import useContactStore from "@/store/ContactStore";
+import useMessageStore from "@/store/MessageStore";
 axios.defaults.withCredentials = true;
 const ContactChat = ({
     id,
     name,
     avatar,
     status,
-    setContactMessages,
     setIsSelected,
 }: {
     id: string;
     name: string;
     avatar: string;
     status: "online" | "offline";
-    setContactMessages: React.Dispatch<React.SetStateAction<ContactMessageType[]>>;
     setIsSelected: (v: boolean) => void;
 }) => {
+    const { contactMessages, setContactMessages } = useMessageStore();
     const { contactId, setSelectedContactId } = useContactStore();
     const isActive = contactId === id;
     const onSelectContact = async () => {

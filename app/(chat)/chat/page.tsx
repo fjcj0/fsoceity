@@ -11,16 +11,17 @@ import { ContactChatType, ContactMessageType } from "@/global";
 import ContactChat from "@/components/chat-components/ContactChat";
 import useAuthStore from "@/store/AuthStore";
 import useContactStore from "@/store/ContactStore";
+import useMessageStore from "@/store/MessageStore";
 axios.defaults.withCredentials = true;
 const page = () => {
     const { user } = useAuthStore();
     const { contactId } = useContactStore();
+    const { contactMessages, setContactMessages } = useMessageStore();
     const [type, setType] = useState<"contacts" | "groups">("contacts");
     const [isSelectedSession, setIsSelectedSession] = useState(false);
     const [isCallStarted, setIsCallStarted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [contacts, setContacts] = useState<ContactChatType[]>([]);
-    const [contactMessages, setContactMessages] = useState<ContactMessageType[]>([]);
     const currentUserId = user?.id;
     const getContacts = async () => {
         setIsLoading(true);
@@ -64,7 +65,6 @@ const page = () => {
                                             name={c.friend.name}
                                             avatar={c.friend.profilePicture}
                                             status="online"
-                                            setContactMessages={setContactMessages}
                                             setIsSelected={setIsSelectedSession}
 
                                         />

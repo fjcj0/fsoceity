@@ -1,3 +1,4 @@
+import { ContactMessageType } from '@/global';
 import { MessageStoreInterface } from '@/types/message_store_types';
 import { create } from 'zustand';
 const useMessageStore = create<MessageStoreInterface>((set, get) => ({
@@ -12,6 +13,10 @@ const useMessageStore = create<MessageStoreInterface>((set, get) => ({
     voice: null,
     setVoice: (voice: AudioBuffer | null) => {
         set({ voice });
+    },
+    contactMessages: [],
+    setContactMessages: (contactMessages: ContactMessageType[]) => {
+        set({ contactMessages });
     }
 }));
 export default useMessageStore;
