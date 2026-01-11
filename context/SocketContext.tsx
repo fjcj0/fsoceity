@@ -1,39 +1,32 @@
 "use client";
-import {
-    createContext,
-    ReactNode,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { getSocket } from "@/config/socket";
+type NotificationType = {
+    action: string;
+    by: string;
+    image: string;
+};
 type SocketContextType = {
     socket: Socket | null;
     connected: boolean;
-    notifications: NotificatioType[];
-    setNotifications: React.Dispatch<React.SetStateAction<NotificatioType[]>>;
+    notifications: NotificationType[];
+    setNotifications: React.Dispatch<React.SetStateAction<NotificationType[]>>;
 };
-type NotificatioType = {
-    action: string,
-    by: string,
-    image: string
-}
 const SocketContext = createContext<SocketContextType>({
     socket: null,
     connected: false,
     notifications: [],
     setNotifications: () => { },
-
 });
 export function SocketProvider({ children }: { children: ReactNode }) {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [connected, setConnected] = useState(false);
-    const [notifications, setNotifications] = useState<NotificatioType[]>([]);
+    const [notifications, setNotifications] = useState<NotificationType[]>([]);
     useEffect(() => {
         const socketInstance = getSocket();
         socketInstance.on("connect", () => {
-            console.log("Connected:", socketInstance.id);
+            console.log("Socket connected:", socketInstance.id);
             setConnected(true);
         });
         socketInstance.on("disconnect", () => {

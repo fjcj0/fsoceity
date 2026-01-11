@@ -42,7 +42,7 @@ const Page = () => {
     useEffect(() => {
         if (!isMount) {
             setContactMessages([]);
-            setMessage('');
+            setMessage("");
             setPicture(null);
             setSelectedContactId(null);
             setIsMount(true);
@@ -55,14 +55,14 @@ const Page = () => {
             setOnlineUsers(users);
         };
         socket.on("online-users", handleOnlineUsers);
+        socket.emit("get-online-users");
         return () => {
             socket.off("online-users", handleOnlineUsers);
         };
     }, [socket]);
-    const filteredContacts =
-        displayOnlineUsers
-            ? contacts.filter((c) => onlineUsers.includes(c.friend.id))
-            : contacts;
+    const filteredContacts = displayOnlineUsers
+        ? contacts.filter((c) => onlineUsers.includes(c.friend.id))
+        : contacts;
     return (
         <div className="w-full max-w-5xl mx-auto h-full flex flex-col">
             <div className="w-full mb-3 flex items-center justify-between">
