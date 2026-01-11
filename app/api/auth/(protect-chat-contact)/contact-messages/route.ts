@@ -15,9 +15,19 @@ export async function GET(request: NextRequest) {
         }
         const isContact = await prisma.contact.findFirst({
             where: {
-                OR: [
-                    { userId: user.id, friendId: receiverId },
-                    { userId: receiverId, friendId: user.id }
+                AND: [
+                    {
+                        OR: [
+                            { userId: user.id },
+                            { friendId: user.id }
+                        ]
+                    },
+                    {
+                        OR: [
+                            { userId: receiverId },
+                            { friendId: receiverId }
+                        ]
+                    }
                 ]
             }
         });

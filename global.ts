@@ -73,7 +73,23 @@ export type ContactChatType = {
     user: {
         id: string;
         name: string;
-        profilePicture?: string;
+        profilePicture: string;
         status: 'online' | 'offline',
     }
+};
+export type ContactMessageType = {
+    id: string;
+    content: string | null;
+    image: string | null;
+    createdAt: string;
+    sender: {
+        id: string;
+        name: string;
+        profilePicture: string;
+    };
+    receiver: {
+        id: string;
+        name: string;
+        profilePicture: string;
+    };
 };

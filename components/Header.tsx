@@ -46,7 +46,7 @@ const Header = () => {
                         </div>
                     )}
                     {isOpen && (
-                        <div className="absolute z-40 bg-white flex flex-col py-5 w-80  -left-32 top-8 rounded-md shadow-lg">
+                        <div className="absolute z-40 bg-white flex flex-col py-5 w-80 -left-72 max-md:-left-40 top-8 rounded-md shadow-lg">
                             {notifications.length > 0 ? (
                                 notifications.map((not, index) => (
                                     <Notification
