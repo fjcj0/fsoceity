@@ -9,16 +9,19 @@ import axios from "axios";
 import LoaderChatLayout from "@/tools/LoaderChatLayout";
 import { ContactChatType, ContactMessageType } from "@/global";
 import ContactChat from "@/components/chat-components/ContactChat";
+import useAuthStore from "@/store/AuthStore";
+import useContactStore from "@/store/ContactStore";
 axios.defaults.withCredentials = true;
 const page = () => {
+    const { user } = useAuthStore();
+    const { contactId } = useContactStore();
     const [type, setType] = useState<"contacts" | "groups">("contacts");
     const [isSelectedSession, setIsSelectedSession] = useState(false);
     const [isCallStarted, setIsCallStarted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [contacts, setContacts] = useState<ContactChatType[]>([]);
     const [contactMessages, setContactMessages] = useState<ContactMessageType[]>([]);
-    const currentUserId = "CURRENT_USER_ID";
-    const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
+    const currentUserId = user?.id;
     const getContacts = async () => {
         setIsLoading(true);
         try {
@@ -39,8 +42,7 @@ const page = () => {
                 <select
                     value={type}
                     onChange={(e) => setType(e.target.value as "contacts" | "groups")}
-                    className="text-xs bg-[#242424] px-3 py-2 rounded-lg text-white outline-none"
-                >
+                    className="text-xs bg-[#242424] px-3 py-2 rounded-lg text-white outline-none">
                     <option value="contacts">Contacts</option>
                     <option value="groups">Groups</option>
                 </select>
@@ -64,8 +66,7 @@ const page = () => {
                                             status="online"
                                             setContactMessages={setContactMessages}
                                             setIsSelected={setIsSelectedSession}
-                                            selectedContactId={selectedContactId}
-                                            setSelectedContactId={setSelectedContactId}
+
                                         />
                                     ))
                                     : groups_chat.map((g) => (
@@ -80,7 +81,6 @@ const page = () => {
                         </div>
                         <div className="col-span-10 h-full min-h-0 bg-black/40 backdrop-blur-md">
                             {!isSelectedSession ? (
-
                                 <div className="w-full h-full flex flex-col items-center justify-center">
                                     <Lottie animationData={animation} loop />
                                     <h1 className="text-center mt-5 text-4xl font-semibold bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-700 bg-clip-text text-transparent">

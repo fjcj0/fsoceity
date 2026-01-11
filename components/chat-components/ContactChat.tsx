@@ -2,6 +2,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { ContactMessageType } from "@/global";
+import useContactStore from "@/store/ContactStore";
 axios.defaults.withCredentials = true;
 const ContactChat = ({
     id,
@@ -10,24 +11,21 @@ const ContactChat = ({
     status,
     setContactMessages,
     setIsSelected,
-    selectedContactId,
-    setSelectedContactId,
 }: {
     id: string;
     name: string;
     avatar: string;
     status: "online" | "offline";
-    setContactMessages: React.Dispatch<
-        React.SetStateAction<ContactMessageType[]>
-    >;
+    setContactMessages: React.Dispatch<React.SetStateAction<ContactMessageType[]>>;
     setIsSelected: (v: boolean) => void;
-    selectedContactId: string | null;
-    setSelectedContactId: (id: string) => void;
 }) => {
-    const isActive = selectedContactId === id;
+    const { contactId, setSelectedContactId } = useContactStore();
+    const isActive = contactId === id;
     const onSelectContact = async () => {
         try {
-            const res = await axios.get<{ messages: ContactMessageType[] }>(`/api/auth/contact-messages?receiverId=${id}`);
+            const res = await axios.get<{ messages: ContactMessageType[] }>(
+                `/api/auth/contact-messages?receiverId=${id}`
+            );
             setContactMessages(res.data.messages);
             setSelectedContactId(id);
             setIsSelected(true);
@@ -38,7 +36,9 @@ const ContactChat = ({
     return (
         <div
             onClick={onSelectContact}
-            className={`w-full flex items-center cursor-pointer transition-colors ${isActive ? "bg-[#242424]" : "hover:bg-[#242424]/60"}`}>
+            className={`w-full flex items-center cursor-pointer transition-colors ${isActive ? "bg-[#242424]" : "hover:bg-[#242424]/60"
+                }`}
+        >
             <div className="flex items-center gap-2 pl-3 py-2 w-full">
                 <div className="relative">
                     {avatar ? (
@@ -54,7 +54,10 @@ const ContactChat = ({
                             {name.charAt(0)}
                         </div>
                     )}
-                    <span className={`absolute bottom-0 right-0 w-2 h-2 rounded-full ${status === "online" ? "bg-green-400" : "bg-red-400"}`} />
+                    <span
+                        className={`absolute bottom-0 right-0 w-2 h-2 rounded-full ${status === "online" ? "bg-green-400" : "bg-red-400"
+                            }`}
+                    />
                 </div>
                 <div className="hidden md:flex flex-col">
                     <p className="text-white font-semibold">{name}</p>

@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { Phone } from "lucide-react";
 import InputMessage from "./InputMessage";
+import useMessageStore from "@/store/MessageStore";
 const Session = ({
     children,
     isUser,
@@ -10,7 +11,7 @@ const Session = ({
     isUser: boolean;
     isCallStarted: boolean;
 }) => {
-    const [message, setMessage] = useState("");
+    const { message, setMessage } = useMessageStore();
     const onSend = async () => {
         if (!message.trim()) return;
         console.log("Send:", message);
@@ -31,8 +32,6 @@ const Session = ({
             <div className="shrink-0">
                 <div className="p-4">
                     <InputMessage
-                        message={message}
-                        setMessage={setMessage}
                         isUser={isUser}
                         onSend={onSend}
                     />
