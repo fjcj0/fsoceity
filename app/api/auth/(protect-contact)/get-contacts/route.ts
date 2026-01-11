@@ -5,24 +5,20 @@ export async function GET(request: NextRequest) {
     try {
         const { user, error } = await authMiddleware(request);
         if (error) return error;
-        const contacts = await prisma.user.findUnique({
+        const contacts = await prisma.contact.findMany({
             where: {
-                id: user.id
+                userId: user.id,
             },
             select: {
-                contacts: {
+                id: true,
+                friend: {
                     select: {
                         id: true,
-                        user: {
-                            select: {
-                                id: true,
-                                name: true,
-                                profilePicture: true,
-                            }
-                        }
-                    }
-                }
-            }
+                        name: true,
+                        profilePicture: true,
+                    },
+                },
+            },
         });
         return NextResponse.json({
             contacts,

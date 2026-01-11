@@ -70,12 +70,13 @@ export type ContactType = {
     isSent: boolean;
 };
 export type ContactChatType = {
-    user: {
+    id: string;
+    friend: {
         id: string;
         name: string;
         profilePicture: string;
-        status: 'online' | 'offline',
-    }
+        status: 'online' | 'offline';
+    };
 };
 export type ContactMessageType = {
     id: string;

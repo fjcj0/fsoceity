@@ -23,7 +23,7 @@ const page = () => {
         setIsLoading(true);
         try {
             const res = await axios.get("/api/auth/get-contacts");
-            setContacts(res.data.contacts.contacts);
+            setContacts(res.data.contacts);
         } catch (err) {
             console.error(err);
         } finally {
@@ -57,10 +57,10 @@ const page = () => {
                                 {type === "contacts"
                                     ? contacts.map((c) => (
                                         <ContactChat
-                                            key={c.user.id}
-                                            id={c.user.id}
-                                            name={c.user.name}
-                                            avatar={c.user.profilePicture}
+                                            key={c.friend.id}
+                                            id={c.friend.id}
+                                            name={c.friend.name}
+                                            avatar={c.friend.profilePicture}
                                             status="online"
                                             setContactMessages={setContactMessages}
                                             setIsSelected={setIsSelectedSession}
