@@ -34,7 +34,7 @@ const Page = () => {
             const res = await axios.get("/api/auth/get-contacts");
             setContacts(res.data.contacts);
         } catch (error) {
-            console.error(error);
+            console.log(error);
         } finally {
             setIsLoading(false);
         }
@@ -86,7 +86,6 @@ const Page = () => {
             {!isLoading ? (
                 <div className="w-full h-[38rem] rounded-3xl overflow-hidden">
                     <div className="w-full h-full grid grid-cols-12 min-h-0">
-                        {/* CONTACT LIST */}
                         <div className="col-span-2 bg-black overflow-y-auto">
                             <div className="mt-6 flex flex-col gap-3">
                                 {type === "contacts" &&
