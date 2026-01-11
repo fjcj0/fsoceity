@@ -15,8 +15,9 @@ import useMessageStore from "@/store/MessageStore";
 axios.defaults.withCredentials = true;
 const page = () => {
     const { user } = useAuthStore();
-    const { contactId } = useContactStore();
+    const { setSelectedContactId } = useContactStore();
     const { contactMessages, setContactMessages } = useMessageStore();
+    const [isMounted, setIsMounted] = useState(false);
     const [type, setType] = useState<"contacts" | "groups">("contacts");
     const [isSelectedSession, setIsSelectedSession] = useState(false);
     const [isCallStarted, setIsCallStarted] = useState(false);
@@ -35,6 +36,10 @@ const page = () => {
         }
     };
     useEffect(() => {
+        if (!isMounted) {
+            setSelectedContactId(null);
+            setIsMounted(true);
+        }
         getContacts();
     }, []);
     return (
