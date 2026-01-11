@@ -22,6 +22,7 @@ const ContactChat = ({
     const { contactId, setSelectedContactId } = useContactStore();
     const isActive = contactId === id;
     const onSelectContact = async () => {
+        setContactMessages([]);
         try {
             const res = await axios.get<{ messages: ContactMessageType[] }>(
                 `/api/auth/contact-messages?receiverId=${id}`
@@ -29,8 +30,8 @@ const ContactChat = ({
             setContactMessages(res.data.messages);
             setSelectedContactId(id);
             setIsSelected(true);
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
         }
     };
     return (
