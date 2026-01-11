@@ -39,6 +39,7 @@ const page = () => {
         if (!isMounted) {
             setSelectedContactId(null);
             setIsMounted(true);
+            setContactMessages([]);
         }
         getContacts();
     }, []);
