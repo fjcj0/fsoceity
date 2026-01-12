@@ -82,6 +82,7 @@ export type ContactMessageType = {
     id: string;
     content: string | null;
     image: string | null;
+    voice: string | null;
     createdAt: string;
     sender: {
         id: string;

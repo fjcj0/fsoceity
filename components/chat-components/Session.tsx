@@ -2,6 +2,11 @@ import { ReactNode, useState } from "react";
 import { Phone } from "lucide-react";
 import InputMessage from "./InputMessage";
 import useMessageStore from "@/store/MessageStore";
+import { uploadImage } from "@/utils/uploadImage";
+import axios from "axios";
+import { useSocket } from "@/context/SocketContext";
+import useContactStore from "@/store/ContactStore";
+axios.defaults.withCredentials = true;
 const Session = ({
     children,
     isUser,
@@ -11,11 +16,24 @@ const Session = ({
     isUser: boolean;
     isCallStarted: boolean;
 }) => {
-    const { message, setMessage } = useMessageStore();
+    const { message, setMessage, picture, setPicture, voice, setVoice, setContactMessages } = useMessageStore();
+    const { contactId } = useContactStore();
+    const [image, setImage] = useState<string>('');
+    const { socket } = useSocket();
     const onSend = async () => {
-        if (!message.trim()) return;
-        console.log("Send:", message);
+        if (!socket) return;
+        let imageUrl = null;
+        let voiceUrl = null;
+        if (picture) imageUrl = await uploadImage(picture);
+        socket.emit("on-send-contact-message", {
+            receiverId: contactId,
+            content: message || null,
+            image: imageUrl,
+            voice: voiceUrl,
+        });
         setMessage("");
+        setPicture(null);
+        setVoice(null);
     };
     return (
         <div className="w-full h-full flex flex-col min-h-0">

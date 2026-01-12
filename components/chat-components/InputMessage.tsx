@@ -73,10 +73,7 @@ const InputMessage = ({
         };
         mediaRecorder.onstop = async () => {
             const blob = new Blob(chunks, { type: "audio/webm" });
-            const arrayBuffer = await blob.arrayBuffer();
-            const audioCtx = new AudioContext();
-            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-            setVoice(audioBuffer);
+            setVoice(blob);
         };
         mediaRecorder.start();
         setIsRecording(true);
@@ -127,26 +124,21 @@ const InputMessage = ({
                         </div>
                     </div>
                 )}
-                {isSending ? (
-                    <div className="w-full py-2 px-3 bg-gray-100 rounded-md text-gray-500 animate-pulse">
-                        Sending...
-                    </div>
-                ) : (
-                    <Input
-                        value={message}
-                        setValue={setMessage}
-                        type="text"
-                        placeholder="Enter your message"
-                        isPassword={false}
-                        setErrorState={setErrorMessage}
-                        errorState={errorMessage}
-                    />
-                )}
+                <Input
+                    value={message}
+                    setValue={setMessage}
+                    type="text"
+                    placeholder="Enter your message"
+                    isPassword={false}
+                    setErrorState={setErrorMessage}
+                    errorState={errorMessage}
+                />
             </div>
             <div className="flex items-center gap-3">
                 <button
                     onClick={handleMicClick}
-                    className={`active:scale-75 transition ${isRecording ? "text-red-500" : ""
+                    disabled={isSending}
+                    className={`active:scale-75 transition ${isSending && 'opacity-50'} ${isRecording ? "text-red-500" : ""
                         }`}
                 >
                     {isRecording ? <StopCircle size={26} /> : <Mic size={26} />}
@@ -154,7 +146,7 @@ const InputMessage = ({
                 <button
                     onClick={handleSend}
                     disabled={isSending}
-                    className="active:scale-75 transition"
+                    className={`active:scale-75 transition ${isSending && 'opacity-50'}`}
                 >
                     <Send size={26} />
                 </button>

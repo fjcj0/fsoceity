@@ -1,26 +1,48 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Lottie from "lottie-react";
+
 import GroupChat from "@/components/chat-components/GroupChat";
 import ContactChat from "@/components/chat-components/ContactChat";
 import Session from "@/components/chat-components/Session";
 import LoaderChatLayout from "@/tools/LoaderChatLayout";
+
 import { groups_chat } from "@/constants/data";
-import { ContactChatType } from "@/global";
+import { ContactChatType, ContactMessageType } from "@/global";
+
 import useAuthStore from "@/store/AuthStore";
-import animation from "../../../animations/Digitalmedia.json";
-import { useSocket } from "@/context/SocketContext";
 import useMessageStore from "@/store/MessageStore";
 import useContactStore from "@/store/ContactStore";
+import { useSocket } from "@/context/SocketContext";
+
+import animation from "../../../animations/Digitalmedia.json";
+
 axios.defaults.withCredentials = true;
+
 const Page = () => {
-    const [isMount, setIsMount] = useState(false);
-    const { setSelectedContactId } = useContactStore();
-    const { contactMessages, setContactMessages, setMessage, setPicture, setVoice } = useMessageStore();
-    const { socket } = useSocket();
+    /* ---------------- helpers ---------------- */
+    const formatTime = (date: string) => {
+        return new Date(date).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    };
+    const lastMessageRef = useRef<HTMLDivElement | null>(null);
     const { user } = useAuthStore();
     const currentUserId = user?.id;
+    const {
+        contactMessages,
+        setContactMessages,
+        setMessage,
+        setPicture,
+        setVoice,
+        addContactMessage,
+    } = useMessageStore();
+    const { setSelectedContactId } = useContactStore();
+    const { socket } = useSocket();
+    const [isMount, setIsMount] = useState(false);
     const [contacts, setContacts] = useState<ContactChatType[]>([]);
     const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
     const [displayOnlineUsers, setDisplayOnlineUsers] = useState(false);
@@ -44,6 +66,7 @@ const Page = () => {
             setContactMessages([]);
             setMessage("");
             setPicture(null);
+            setVoice(null);
             setSelectedContactId(null);
             setIsMount(true);
         }
@@ -60,6 +83,24 @@ const Page = () => {
             socket.off("online-users", handleOnlineUsers);
         };
     }, [socket]);
+    useEffect(() => {
+        if (!socket) return;
+        const handler = (message: ContactMessageType) => {
+            addContactMessage(message);
+        };
+        socket.on("receive-message", handler);
+        return () => {
+            socket.off("receive-message", handler);
+        };
+    }, [socket]);
+    useEffect(() => {
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            });
+        }
+    }, [contactMessages]);
     const filteredContacts = displayOnlineUsers
         ? contacts.filter((c) => onlineUsers.includes(c.friend.id))
         : contacts;
@@ -124,16 +165,59 @@ const Page = () => {
                                 </div>
                             ) : (
                                 <Session isCallStarted={isCallStarted} isUser={false}>
-                                    <div className="flex flex-col gap-3 p-4">
-                                        {contactMessages.map((msg) => {
+                                    <div className="w-full flex flex-col gap-3 p-4">
+                                        {contactMessages.map((msg, index) => {
                                             const isMine = msg.sender.id === currentUserId;
+                                            const isLast =
+                                                index === contactMessages.length - 1;
+
                                             return (
                                                 <div
                                                     key={msg.id}
-                                                    className={`p-3 rounded-lg max-w-[70%] text-white ${isMine ? "ml-auto bg-blue-600" : "mr-auto bg-white/10"
+                                                    ref={isLast ? lastMessageRef : null}
+                                                    className={`flex items-end gap-2 ${isMine
+                                                        ? "justify-end"
+                                                        : "justify-start"
                                                         }`}
                                                 >
-                                                    {msg.content}
+                                                    {!isMine && (
+                                                        <img
+                                                            src={msg.sender.profilePicture}
+                                                            alt={msg.sender.name}
+                                                            className="w-8 h-8 rounded-full object-cover"
+                                                        />
+                                                    )}
+
+                                                    <div
+                                                        className={`max-w-[70%] rounded-xl p-3 text-sm text-white ${isMine
+                                                            ? "bg-blue-600 rounded-br-none"
+                                                            : "bg-white/10 rounded-bl-none"
+                                                            }`}
+                                                    >
+                                                        {msg.image && (
+                                                            <img
+                                                                src={msg.image}
+                                                                alt="sent"
+                                                                className="mb-2 rounded-lg max-w-full"
+                                                            />
+                                                        )}
+
+                                                        {msg.content && (
+                                                            <p>{msg.content}</p>
+                                                        )}
+
+                                                        <div className="text-[10px] text-white/50 text-right mt-1">
+                                                            {formatTime(msg.createdAt)}
+                                                        </div>
+                                                    </div>
+
+                                                    {isMine && (
+                                                        <img
+                                                            src={msg.sender.profilePicture}
+                                                            alt="You"
+                                                            className="w-8 h-8 rounded-full object-cover"
+                                                        />
+                                                    )}
                                                 </div>
                                             );
                                         })}
