@@ -5,6 +5,7 @@ export function getSocket(): Socket {
         socket = io(process.env.NEXT_PUBLIC_SERVER, {
             withCredentials: true,
             autoConnect: false,
+            transports: ["websocket"]
         });
         socket.connect();
     }
