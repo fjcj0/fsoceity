@@ -22,16 +22,30 @@ const Session = ({
     const { socket } = useSocket();
     const onSend = async () => {
         if (!socket) return;
-        let imageUrl = null;
-        let voiceUrl = null;
-        if (picture) imageUrl = await uploadImage(picture);
-        socket.emit("on-send-contact-message", {
+        let imageUrl: string | null = null;
+        let voiceUrl: string | null = null;
+        if (picture) {
+            imageUrl = await uploadImage(picture) as string;
+        }
+        if (voice) {
+            const formData = new FormData();
+            formData.append('file', voice);
+            try {
+                const response = await axios.post('/api/upload-voice', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                voiceUrl = response.data.voiceUrl;
+            } catch (error: unknown) {
+                console.log('Error uploading voice:', error);
+            }
+        }
+        socket.emit('on-send-contact-message', {
             receiverId: contactId,
             content: message || null,
             image: imageUrl,
             voice: voiceUrl,
         });
-        setMessage("");
+        setMessage('');
         setPicture(null);
         setVoice(null);
     };

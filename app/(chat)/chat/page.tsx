@@ -1,28 +1,21 @@
 "use client";
-
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Lottie from "lottie-react";
-
 import GroupChat from "@/components/chat-components/GroupChat";
 import ContactChat from "@/components/chat-components/ContactChat";
 import Session from "@/components/chat-components/Session";
 import LoaderChatLayout from "@/tools/LoaderChatLayout";
-
 import { groups_chat } from "@/constants/data";
 import { ContactChatType, ContactMessageType } from "@/global";
-
 import useAuthStore from "@/store/AuthStore";
 import useMessageStore from "@/store/MessageStore";
 import useContactStore from "@/store/ContactStore";
 import { useSocket } from "@/context/SocketContext";
-
 import animation from "../../../animations/Digitalmedia.json";
-
+import { Play, StopCircle } from "lucide-react";
 axios.defaults.withCredentials = true;
-
 const Page = () => {
-    /* ---------------- helpers ---------------- */
     const formatTime = (date: string) => {
         return new Date(date).toLocaleTimeString([], {
             hour: "2-digit",
@@ -50,6 +43,9 @@ const Page = () => {
     const [isSelectedSession, setIsSelectedSession] = useState(false);
     const [isCallStarted, setIsCallStarted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
+    const [audioProgress, setAudioProgress] = useState<{ [key: string]: number }>({});
+    const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
     const getContacts = async () => {
         setIsLoading(true);
         try {
@@ -104,6 +100,31 @@ const Page = () => {
     const filteredContacts = displayOnlineUsers
         ? contacts.filter((c) => onlineUsers.includes(c.friend.id))
         : contacts;
+    function togglePlayAudio(msgId: string, audioUrl: string) {
+        const audio = audioRefs.current[msgId];
+        if (!audio) return;
+        if (playingAudioId !== msgId) {
+            if (playingAudioId && audioRefs.current[playingAudioId]) {
+                audioRefs.current[playingAudioId].pause();
+                audioRefs.current[playingAudioId].currentTime = 0;
+            }
+            setPlayingAudioId(msgId);
+            audio.play();
+        } else {
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+    }
+    function stopAudio(msgId: string) {
+        const audio = audioRefs.current[msgId];
+        if (!audio) return;
+        audio.pause();
+        audio.currentTime = 0;
+        setPlayingAudioId(null);
+    }
     return (
         <div className="w-full max-w-5xl mx-auto h-full flex flex-col">
             <div className="w-full mb-3 flex items-center justify-between">
@@ -168,16 +189,12 @@ const Page = () => {
                                     <div className="w-full flex flex-col gap-3 p-4">
                                         {contactMessages.map((msg, index) => {
                                             const isMine = msg.sender.id === currentUserId;
-                                            const isLast =
-                                                index === contactMessages.length - 1;
-
+                                            const isLast = index === contactMessages.length - 1;
                                             return (
                                                 <div
                                                     key={msg.id}
                                                     ref={isLast ? lastMessageRef : null}
-                                                    className={`flex items-end gap-2 ${isMine
-                                                        ? "justify-end"
-                                                        : "justify-start"
+                                                    className={`flex items-end gap-2 ${isMine ? "justify-end" : "justify-start"
                                                         }`}
                                                 >
                                                     {!isMine && (
@@ -187,30 +204,54 @@ const Page = () => {
                                                             className="w-8 h-8 rounded-full object-cover"
                                                         />
                                                     )}
-
                                                     <div
                                                         className={`max-w-[70%] rounded-xl p-3 text-sm text-white ${isMine
                                                             ? "bg-blue-600 rounded-br-none"
                                                             : "bg-white/10 rounded-bl-none"
                                                             }`}
-                                                    >
-                                                        {msg.image && (
-                                                            <img
-                                                                src={msg.image}
-                                                                alt="sent"
-                                                                className="mb-2 rounded-lg max-w-full"
-                                                            />
+                                                    >                                                        {msg.image && (
+                                                        <img
+                                                            src={msg.image}
+                                                            alt="sent"
+                                                            className="mb-2 rounded-lg max-w-full"
+                                                        />
+                                                    )}
+                                                        {msg.content && <p>{msg.content}</p>}
+                                                        {msg.voice && (
+                                                            <div className=" flex flex-col gap-1">
+                                                                <div className="flex items-center">
+                                                                    <button
+                                                                        onClick={() => togglePlayAudio(msg.id, msg.voice!)}
+                                                                        className="rounded-full w-10 h-10 flex items-start justify-start  text-white"
+                                                                    >
+                                                                        {playingAudioId === msg.id &&
+                                                                            audioRefs.current[msg.id] &&
+                                                                            !audioRefs.current[msg.id].paused ? (
+                                                                            <StopCircle size={23} />
+                                                                        ) : (
+                                                                            <Play size={23} />
+                                                                        )}
+                                                                    </button>
+                                                                </div>
+                                                                <audio
+                                                                    ref={(el) => {
+                                                                        if (el) audioRefs.current[msg.id] = el;
+                                                                    }}
+                                                                    src={msg.voice}
+                                                                    onTimeUpdate={() =>
+                                                                        setAudioProgress((prev) => ({
+                                                                            ...prev,
+                                                                            [msg.id]: audioRefs.current[msg.id]?.currentTime || 0,
+                                                                        }))
+                                                                    }
+                                                                    onEnded={() => setPlayingAudioId(null)}
+                                                                />
+                                                            </div>
                                                         )}
-
-                                                        {msg.content && (
-                                                            <p>{msg.content}</p>
-                                                        )}
-
                                                         <div className="text-[10px] text-white/50 text-right mt-1">
                                                             {formatTime(msg.createdAt)}
                                                         </div>
                                                     </div>
-
                                                     {isMine && (
                                                         <img
                                                             src={msg.sender.profilePicture}

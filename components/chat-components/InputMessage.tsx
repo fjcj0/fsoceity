@@ -74,6 +74,7 @@ const InputMessage = ({
         mediaRecorder.onstop = async () => {
             const blob = new Blob(chunks, { type: "audio/webm" });
             setVoice(blob);
+            handleSend();
         };
         mediaRecorder.start();
         setIsRecording(true);
