@@ -1,27 +1,23 @@
-import { ContactMessageType } from '@/global';
-import { MessageStoreInterface } from '@/types/message_store_types';
-import { blob } from 'stream/consumers';
-import { create } from 'zustand';
-const useMessageStore = create<MessageStoreInterface>((set, get) => ({
-    message: '',
-    setMessage: (message: string) => {
-        set({ message });
-    },
+import { create } from "zustand";
+import { MessageStoreInterface } from "@/types/message_store_types";
+const useMessageStore = create<MessageStoreInterface>((set) => ({
+    message: "",
+    setMessage: (message) => set({ message }),
     picture: null,
-    setPicture: (picture: File | null) => {
-        set({ picture })
-    },
+    setPicture: (picture) => set({ picture }),
     voice: null,
-    setVoice: (voice: Blob | null) => {
-        set({ voice });
-    },
+    setVoice: (voice) => set({ voice }),
     contactMessages: [],
-    setContactMessages: (contactMessages: ContactMessageType[]) => {
-        set({ contactMessages });
-    },
-    addContactMessage: (message: ContactMessageType) =>
+    setContactMessages: (contactMessages) =>
+        set({ contactMessages }),
+    addContactMessage: (message) =>
         set((state) => ({
-            contactMessages: [...state.contactMessages, message]
+            contactMessages: [...state.contactMessages, message],
         })),
+    clearMedia: () =>
+        set({
+            picture: null,
+            voice: null,
+        }),
 }));
 export default useMessageStore;

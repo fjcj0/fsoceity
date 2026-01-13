@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { Phone } from "lucide-react";
 import InputMessage from "./InputMessage";
 import useMessageStore from "@/store/MessageStore";
@@ -16,58 +16,42 @@ const Session = ({
     isUser: boolean;
     isCallStarted: boolean;
 }) => {
-    const { message, setMessage, picture, setPicture, voice, setVoice, setContactMessages } = useMessageStore();
+    const { message, picture, setMessage, setPicture } = useMessageStore();
     const { contactId } = useContactStore();
-    const [image, setImage] = useState<string>('');
     const { socket } = useSocket();
-    const onSend = async () => {
+    const onSend = async (voiceBlob?: Blob) => {
         if (!socket) return;
         let imageUrl: string | null = null;
         let voiceUrl: string | null = null;
         if (picture) {
             imageUrl = await uploadImage(picture) as string;
         }
-        if (voice) {
+        if (voiceBlob) {
             const formData = new FormData();
-            formData.append('file', voice);
-            try {
-                const response = await axios.post('/api/upload-voice', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-                voiceUrl = response.data.voiceUrl;
-            } catch (error: unknown) {
-                console.log('Error uploading voice:', error);
-            }
+            formData.append("file", voiceBlob);
+            const res = await axios.post("/api/upload-voice", formData);
+            voiceUrl = res.data.voiceUrl;
         }
-        socket.emit('on-send-contact-message', {
+        socket.emit("on-send-contact-message", {
             receiverId: contactId,
             content: message || null,
             image: imageUrl,
             voice: voiceUrl,
         });
-        setMessage('');
+        setMessage("");
         setPicture(null);
-        setVoice(null);
     };
     return (
-        <div className="w-full h-full flex flex-col min-h-0">
-            <div className="w-full">
-                <div className="flex items-center justify-start shrink-0 p-4">
-                    <button className="active:scale-75 transition">
-                        <Phone size={24} color="white" />
-                    </button>
-                </div>
+        <div className="w-full h-full flex flex-col">
+            <div className="p-4">
+                <Phone size={24} />
             </div>
-            <div className="flex-1 w-full overflow-y-auto py-4 min-h-0 px-3">
+            <div className="flex-1 overflow-y-auto px-3">
                 {children}
             </div>
-            <div className="shrink-0">
-                <div className="p-4">
-                    <InputMessage
-                        isUser={isUser}
-                        onSend={onSend}
-                    />
-                </div>
+
+            <div className="p-4">
+                <InputMessage isUser={isUser} onSend={onSend} />
             </div>
         </div>
     );
