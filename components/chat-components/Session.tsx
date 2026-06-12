@@ -43,16 +43,9 @@ const Session = ({
     };
     return (
         <div className="w-full h-full flex flex-col">
-            <div className="p-4">
-                <button onClick={async () => console.log('join call')} className={`${isCallStarted ? 'bg-green-600/70' : 'bg-blue-600/70'} cursor-pointer active:scale-75 active:opacity-50 transition-all duration-300 px-3 py-1 gap-1 font-bold rounded-full flex items-center justify-center text-center text-white`}>
-                    <Phone size={20} />
-                    <p>{!isCallStarted ? 'Call Now' : 'Join Now'}</p>
-                </button>
-            </div>
-            <div className="flex-1 overflow-y-auto px-3">
+            <div className="flex-1 overflow-y-auto px-3 py-1">
                 {children}
             </div>
-
             <div className="p-4">
                 <InputMessage isUser={isUser} onSend={onSend} />
             </div>
