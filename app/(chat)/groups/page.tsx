@@ -4,7 +4,7 @@ import Input from "@/components/Input";
 import { dummyGroups } from "@/constants/data";
 import { useState } from "react";
 const page = () => {
-    let devloplemt = true;
+    let devloplemt = false;
     const [groupName, setGroupName] = useState<string>("");
     const [errorGroupName, setErrorGroupName] = useState<string>("");
     const [filter, setFilter] = useState<"All" | "Joined" | "Pending" | "Created" | "NotJoined">("All");
@@ -39,6 +39,7 @@ const page = () => {
                     type="text"
                     isPassword={false}
                 />
+                <div className="flex items-center justify-center gap-2">
                 <select
                     className="px-2 py-2 rounded-xl bg-black/50"
                     value={filter}
@@ -49,7 +50,8 @@ const page = () => {
                     <option value="Pending">Pending</option>
                     <option value="Created">Created</option>
                     <option value="NotJoined">Not Joined</option>
-                </select>
+                    </select>
+                </div>
             </div>
             <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 gap-5 w-full">
                 {filteredGroups
